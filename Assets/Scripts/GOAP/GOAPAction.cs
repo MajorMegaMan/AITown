@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GOAPAction
+public abstract class GOAPAction
 {
 
     protected GOAPWorldState preconditions;
@@ -71,23 +71,11 @@ public class GOAPAction
         return result;
     }
 
-    public virtual void AddEffects(GOAPWorldState state)
-    {
-        //Console.WriteLine("     " + name + " : Adding Effects");
-    }
+    public abstract void AddEffects(GOAPWorldState state);
 
-    public virtual ActionState PerformAction(GOAPWorldState worldState)
-    {
-        return default;
-    }
+    public abstract ActionState PerformAction(GOAPWorldState worldState);
 
-    public virtual void EnterAction(AIController agent)
-    {
+    public abstract void EnterAction(GOAPAgent agent);
 
-    }
-
-    public virtual bool IsInRange(AIController agent)
-    {
-        return true;
-    }
+    public abstract bool IsInRange(GOAPAgent agent);
 }

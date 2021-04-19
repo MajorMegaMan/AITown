@@ -15,7 +15,7 @@ public class StoreWood : GOAPAction
 
     public override void AddEffects(GOAPWorldState state)
     {
-        base.AddEffects(state);
+        //base.AddEffects(state);
         state.SetElementValue(WorldValues.holdingWood, false);
         var data = state.GetData(WorldValues.storedWood);
         int woodVal = data.ConvertValue<int>();
@@ -29,14 +29,14 @@ public class StoreWood : GOAPAction
         return ActionState.completed;
     }
 
-    public override void EnterAction(AIController agent)
+    public override void EnterAction(GOAPAgent agent)
     {
         // This is where the logic to find a tree would go but right now it is just using a debug value for testing
         agent.actionObject = agent.woodStoreTarget.gameObject;
         agent.m_actionTargetLocation = agent.woodStoreTarget.position;
     }
 
-    public override bool IsInRange(AIController agent)
+    public override bool IsInRange(GOAPAgent agent)
     {
         return (agent.transform.position - agent.actionObject.transform.position).magnitude < agent.stoppingDistance;
     }
