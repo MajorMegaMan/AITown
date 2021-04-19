@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GOAPWorldState
 {
-    Comp comp = new Comp();
+    static Comp comp = new Comp();
     HashSet<WorldData> hashSet;
 
     List<string> names = new List<string>();
@@ -99,6 +99,29 @@ public class GOAPWorldState
         }
         // this Should almost definitely not be returning true as default but I will leave it for now as not to make errors
         return true;
+    }
+
+    public static GOAPWorldState CombineWithReferences(GOAPWorldState first, GOAPWorldState second)
+    {
+        GOAPWorldState combined = new GOAPWorldState();
+        
+        foreach(var data in first.hashSet)
+        {
+            if(combined.hashSet.Add(data))
+            {
+                combined.names.Add(data.name);
+            }
+        }
+
+        foreach (var data in second.hashSet)
+        {
+            if (combined.hashSet.Add(data))
+            {
+                combined.names.Add(data.name);
+            }
+        }
+
+        return combined;
     }
 }
 

@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class AIController : MonoBehaviour
+public class GOAPAgent : MonoBehaviour
 {
     public float stoppingDistance = 0.5f;
 
-    NavMeshAgent navAgent;
+    [HideInInspector] public NavMeshAgent navAgent;
 
     Vector3 m_targetPosition = Vector3.zero;
 
     StateMachine m_stateMachine = new StateMachine();
 
     // GOAP
-    GOAPWorldState m_worldState = new GOAPWorldState();
-    List<GOAPAction> m_actions = new List<GOAPAction>();
+    GOAPWorldState m_combinedWorldState;
+    GOAPWorldState m_agentWorldState;
     Queue<GOAPAction> m_plan = new Queue<GOAPAction>();
-
+    GOAPBehaviour m_behaviour;
 
     GOAPAction m_currentAction;
     // Action var
@@ -28,16 +28,15 @@ public class AIController : MonoBehaviour
     [Header("Debugging")]
     public Transform treeTarget;
     public Transform woodStoreTarget;
+    public Transform foodBushTarget;
+
+    public float hunger = 100.0f;
 
     private void Awake()
     {
         navAgent = GetComponent<NavMeshAgent>();
 
-        // Debugging
-        //m_stateMachine.SetPlanFunc(DecideState);
-        //m_stateMachine.SetMoveFunc(MoveTo);
-        //m_stateMachine.SetPerformFunc(PerformAction);
-
+        // initialise states
         m_stateMachine.AddStates(3);
         m_stateMachine.SetStateFunc(0, DecideState);
         m_stateMachine.SetStateFunc(1, MoveTo);
@@ -45,24 +44,40 @@ public class AIController : MonoBehaviour
 
         m_stateMachine.SetState(0);
 
-        m_worldState.CreateElement(WorldValues.holdingWood, false);
-        m_worldState.CreateElement(WorldValues.storedWood, 0);
-
-        m_actions.Add(new PickUpWood());
-        m_actions.Add(new StoreWood());
+        // Create World State
+        //m_agentWorldState.CreateElement(WorldValues.holdingWood, false);
+        //m_agentWorldState.CreateElement(WorldValues.storedWood, 0);
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        m_agentWorldState = m_behaviour.GetSelfishNeeds();
     }
 
     // Update is called once per frame
     void Update()
     {
+        m_behaviour.Update(this, m_agentWorldState);
         m_stateMachine.CallState();
+
+        // debugging
+        hunger = m_agentWorldState.GetElementValue<float>(WorldValues.hunger);
     }
+
+    public void SetWorldState(GOAPWorldState worldState)
+    {
+        m_combinedWorldState = GOAPWorldState.CombineWithReferences(worldState, m_agentWorldState);
+    }
+
+    public void SetBehaviour(GOAPBehaviour behaviour)
+    {
+        m_behaviour = behaviour;
+        // new behaviour will most likely not contain the actions remaining in the queue
+        // so just simply clear them all and then the agent will find a new plan.
+        m_plan.Clear();
+    }
+
     void SetPathToTargetPosition()
     {
         Debug.Log("settingPath");
@@ -73,7 +88,7 @@ public class AIController : MonoBehaviour
         m_stateMachine.SetState(1);
     }
 
-    public void SetTargetPosition(Vector3 targetPosition)
+    void SetTargetPosition(Vector3 targetPosition)
     {
         m_targetPosition = targetPosition;
         SetPathToTargetPosition();
@@ -91,6 +106,10 @@ public class AIController : MonoBehaviour
 
     void MoveTo()
     {
+        if(navAgent.pathPending)
+        {
+            return;
+        }
         // Check distance
         if(navAgent.remainingDistance < stoppingDistance)
         {
@@ -102,16 +121,12 @@ public class AIController : MonoBehaviour
         }
     }
 
-    void GetPlan()
+    public void FindPlan()
     {
         // Get GOAPplan
         // need to find goal
-        GOAPWorldState goal = new GOAPWorldState(m_worldState);
-        var data = goal.GetData(WorldValues.storedWood);
-        int woodVal = data.ConvertValue<int>();
-        woodVal++;
-        data.value = woodVal;
-        m_plan = GOAPPlanner.CalcPlan(m_worldState, goal, m_actions);
+        m_plan = m_behaviour.CalcPlan(m_combinedWorldState);
+        m_stateMachine.SetState(0);
     }
 
     void DecideState()
@@ -125,7 +140,6 @@ public class AIController : MonoBehaviour
             if(m_currentAction.IsInRange(this))
             {
                 // state = perform
-                Debug.Log("Entering Action");
                 m_stateMachine.SetState(2);
             }
             else
@@ -140,7 +154,7 @@ public class AIController : MonoBehaviour
             // there is no plan
             // find a new one
             Debug.Log("Getting Plan"); 
-            GetPlan();
+            FindPlan();
         }
     }
 
@@ -148,7 +162,7 @@ public class AIController : MonoBehaviour
     {
         Debug.Log("Performing Action");
         // Check result of performing action
-        switch (m_currentAction.PerformAction(m_worldState))
+        switch (m_currentAction.PerformAction(m_combinedWorldState))
         {
             case GOAPAction.ActionState.completed:
                 {
@@ -165,6 +179,7 @@ public class AIController : MonoBehaviour
             case GOAPAction.ActionState.interrupt:
                 {
                     // action was interrupted and as a result was not completed therefore a new plan may be needed
+                    FindPlan();
                     break;
                 }
         }
