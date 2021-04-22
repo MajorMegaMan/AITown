@@ -25,7 +25,7 @@ public class AIManager : MonoBehaviour
         m_worldState.CreateElement(WorldValues.storedFood, 0);
         m_worldState.CreateElement(WorldValues.axeAvailable, true);
 
-        m_worldState.CreateElement(WorldValues.worldAxe, null); // this class type should be a HoldableItem
+        m_worldState.CreateElement(WorldValues.worldAxe, axeObjects[0]); // this class type should be a HoldableItem
 
         m_behvaiourList.Add(new AIHumanBehaviour());
 

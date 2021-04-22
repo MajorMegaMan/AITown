@@ -38,8 +38,10 @@ public class PickUpAxe : GOAPAction
         // as the previous journey may have taken too long and an axe is now not available
         if(agentState.GetElementValue<bool>(WorldValues.axeAvailable))
         {
-
-            agent.actionObject = agentState.GetElementValue<HoldableItem>(WorldValues.worldAxe).gameObject;
+            //HoldableItem axe = agentState.GetElementValue<HoldableItem>(WorldValues.worldAxe);
+            //HoldableItem axe = (HoldableItem)(agentState.GetElementValue(WorldValues.worldAxe));
+            var obj = agentState.GetElementValue<GameObject>(WorldValues.worldAxe);
+            agent.actionObject = obj;
             agent.m_actionTargetLocation = agent.actionObject.transform.position;
             return true;
         }
