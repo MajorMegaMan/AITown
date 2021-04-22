@@ -70,9 +70,16 @@ public class GOAPAgent : MonoBehaviour
         m_combinedWorldState = GOAPWorldState.CombineWithReferences(worldState, m_agentWorldState);
     }
 
+    // returns a new worldstate from the cobined world and this agents selfish needs
+    public GOAPWorldState GetWorldState()
+    {
+        return new GOAPWorldState(m_combinedWorldState);
+    }
+
     public void SetBehaviour(GOAPBehaviour behaviour)
     {
         m_behaviour = behaviour;
+        //m_agentWorldState = m_behaviour.GetSelfishNeeds();
         // new behaviour will most likely not contain the actions remaining in the queue
         // so just simply clear them all and then the agent will find a new plan.
         m_plan.Clear();
@@ -123,6 +130,7 @@ public class GOAPAgent : MonoBehaviour
 
     public void FindPlan()
     {
+        Debug.Log("Getting Plan");
         // Get GOAPplan
         // need to find goal
         m_plan = m_behaviour.CalcPlan(m_combinedWorldState);
@@ -135,7 +143,14 @@ public class GOAPAgent : MonoBehaviour
         {
             // plan was found
             m_currentAction = m_plan.Dequeue();
-            m_currentAction.EnterAction(this);
+
+            // Check if the action target was assigned correctly
+            if(!m_currentAction.EnterAction(this))
+            {
+                // Plan is garbage now find a new one
+                FindPlan();
+                return;
+            }
             // if in range of action
             if(m_currentAction.IsInRange(this))
             {
@@ -153,7 +168,6 @@ public class GOAPAgent : MonoBehaviour
         {
             // there is no plan
             // find a new one
-            Debug.Log("Getting Plan"); 
             FindPlan();
         }
     }
@@ -162,7 +176,7 @@ public class GOAPAgent : MonoBehaviour
     {
         Debug.Log("Performing Action");
         // Check result of performing action
-        switch (m_currentAction.PerformAction(m_combinedWorldState))
+        switch (m_currentAction.PerformAction(this, m_combinedWorldState))
         {
             case GOAPAction.ActionState.completed:
                 {

@@ -15,11 +15,16 @@ public class AIHumanBehaviour : GOAPBehaviour
         m_actions.Add(new PickUpFood());
         m_actions.Add(new EatFood());
 
+        m_actions.Add(new PickUpAxe());
+        m_actions.Add(new DropAxe());
+
         // Initialise WorldStateNeeds
         m_selfishNeeds.CreateElement(WorldValues.holdingWood, false);
         m_selfishNeeds.CreateElement(WorldValues.holdingFood, false);
         m_selfishNeeds.CreateElement(WorldValues.hunger, 100.0f);
         m_selfishNeeds.CreateElement(WorldValues.hasProcessedHunger, false);
+
+        m_selfishNeeds.CreateElement(WorldValues.holdingAxe, false);
     }
 
     public override GOAPWorldState FindGoal(GOAPWorldState agentWorldState)

@@ -10,6 +10,8 @@ public class AIManager : MonoBehaviour
 
     List<GOAPBehaviour> m_behvaiourList = new List<GOAPBehaviour>();
 
+    public List<GameObject> axeObjects;
+
     private void Awake()
     {
         WorldValues.Init();
@@ -21,6 +23,9 @@ public class AIManager : MonoBehaviour
 
         m_worldState.CreateElement(WorldValues.storedWood, 0);
         m_worldState.CreateElement(WorldValues.storedFood, 0);
+        m_worldState.CreateElement(WorldValues.axeAvailable, true);
+
+        m_worldState.CreateElement(WorldValues.worldAxe, null); // this class type should be a HoldableItem
 
         m_behvaiourList.Add(new AIHumanBehaviour());
 

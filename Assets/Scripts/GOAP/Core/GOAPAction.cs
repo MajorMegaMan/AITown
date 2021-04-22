@@ -73,9 +73,9 @@ public abstract class GOAPAction
 
     public abstract void AddEffects(GOAPWorldState state);
 
-    public abstract ActionState PerformAction(GOAPWorldState worldState);
+    public abstract ActionState PerformAction(GOAPAgent agent, GOAPWorldState worldState);
 
-    public abstract void EnterAction(GOAPAgent agent);
+    public abstract bool EnterAction(GOAPAgent agent);
 
     public abstract bool IsInRange(GOAPAgent agent);
 }

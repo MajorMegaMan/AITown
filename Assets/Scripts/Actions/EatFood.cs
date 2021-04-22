@@ -22,15 +22,16 @@ public class EatFood : GOAPAction
         state.SetElementValue(WorldValues.hasProcessedHunger, false);
     }
 
-    public override ActionState PerformAction(GOAPWorldState worldState)
+    public override ActionState PerformAction(GOAPAgent agent, GOAPWorldState worldState)
     {
         AddEffects(worldState);
         return ActionState.completed;
     }
 
-    public override void EnterAction(GOAPAgent agent)
+    public override bool EnterAction(GOAPAgent agent)
     {
         Debug.Log(name);
+        return true;
     }
 
     public override bool IsInRange(GOAPAgent agent)

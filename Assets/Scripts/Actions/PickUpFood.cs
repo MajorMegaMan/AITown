@@ -18,17 +18,18 @@ public class PickUpFood : GOAPAction
         state.SetElementValue(WorldValues.holdingFood, true);
     }
 
-    public override ActionState PerformAction(GOAPWorldState worldState)
+    public override ActionState PerformAction(GOAPAgent agent, GOAPWorldState worldState)
     {
         AddEffects(worldState);
         return ActionState.completed;
     }
 
-    public override void EnterAction(GOAPAgent agent)
+    public override bool EnterAction(GOAPAgent agent)
     {
         // This is where the logic to find a foodSource would go but right now it is just using a debug value for testing
         agent.actionObject = agent.foodBushTarget.gameObject;
         agent.m_actionTargetLocation = agent.foodBushTarget.position;
+        return true;
     }
 
     public override bool IsInRange(GOAPAgent agent)
