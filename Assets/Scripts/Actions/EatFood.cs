@@ -6,8 +6,9 @@ public class EatFood : GOAPAction
 {
     public EatFood()
     {
-        preconditions.CreateElement(WorldValues.holdingFood, true);
-        effects.CreateElement(WorldValues.holdingFood, false);
+        preconditions.CreateElement(WorldValues.holdItemType, WorldValues.HoldItem.food);
+
+        effects.CreateElement(WorldValues.holdItemType, WorldValues.HoldItem.nothing);
         effects.CreateElement(WorldValues.hunger, 100.0f);
         effects.CreateElement(WorldValues.hasProcessedHunger, false);
 
@@ -17,7 +18,7 @@ public class EatFood : GOAPAction
     public override void AddEffects(GOAPWorldState state)
     {
         //base.AddEffects(state);
-        state.SetElementValue(WorldValues.holdingFood, false);
+        state.SetElementValue(WorldValues.holdItemType, WorldValues.HoldItem.nothing);
         state.SetElementValue(WorldValues.hunger, 100.0f);
         state.SetElementValue(WorldValues.hasProcessedHunger, false);
     }

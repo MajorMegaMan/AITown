@@ -19,6 +19,11 @@ public static class GOAPPlanner
 
     public static Queue<GOAPAction> CalcPlan(GOAPWorldState currentWorldstate, GOAPWorldState goal, List<GOAPAction> actions)
     {
+        if(goal == null)
+        {
+            return new Queue<GOAPAction>();
+        }
+
         Reset();
 
         //List<Node> outcomeTree = new List<Node>();

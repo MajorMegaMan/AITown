@@ -6,9 +6,11 @@ public class PickUpWood : GOAPAction
 {
     public PickUpWood()
     {
-        preconditions.CreateElement(WorldValues.holdingWood, false);
-        preconditions.CreateElement(WorldValues.holdingAxe, true);
-        effects.CreateElement(WorldValues.holdingWood, true);
+        preconditions.CreateElement(WorldValues.holdItemType, WorldValues.HoldItem.nothing);
+        preconditions.CreateElement(WorldValues.woodAvailable, true);
+        //preconditions.CreateElement(WorldValues.holdingAxe, true);
+        effects.CreateElement(WorldValues.holdItemType, WorldValues.HoldItem.wood);
+        effects.CreateElement(WorldValues.woodAvailable, false);
 
         name = "Pick Up Wood";
     }
@@ -16,7 +18,8 @@ public class PickUpWood : GOAPAction
     public override void AddEffects(GOAPWorldState state)
     {
         //base.AddEffects(state);
-        state.SetElementValue(WorldValues.holdingWood, true);
+        state.SetElementValue(WorldValues.holdItemType, WorldValues.HoldItem.wood);
+        state.SetElementValue(WorldValues.woodAvailable, false);
     }
 
     public override ActionState PerformAction(GOAPAgent agent, GOAPWorldState worldState)
@@ -27,14 +30,14 @@ public class PickUpWood : GOAPAction
 
     public override bool EnterAction(GOAPAgent agent)
     {
-        // This is where the logic to find a tree would go but right now it is just using a debug value for testing
-        agent.actionObject = agent.treeTarget.gameObject;
-        agent.m_actionTargetLocation = agent.treeTarget.position;
+        // find wood to pick up
+        // currently just represented by a bool
         return true;
     }
 
     public override bool IsInRange(GOAPAgent agent)
     {
-        return (agent.transform.position - agent.actionObject.transform.position).magnitude < agent.stoppingDistance;
+        //return (agent.transform.position - agent.actionObject.transform.position).magnitude < agent.stoppingDistance;
+        return true;
     }
 }

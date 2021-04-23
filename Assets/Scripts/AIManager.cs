@@ -6,7 +6,7 @@ public class AIManager : MonoBehaviour
 {
     GOAPWorldState m_worldState = new GOAPWorldState();
 
-    public List<GOAPAgent> m_allAgents;// = new List<GOAPAgent>();
+    List<GOAPAgent> m_allAgents;// = new List<GOAPAgent>();
 
     List<GOAPBehaviour> m_behvaiourList = new List<GOAPBehaviour>();
 
@@ -24,10 +24,20 @@ public class AIManager : MonoBehaviour
         m_worldState.CreateElement(WorldValues.storedWood, 0);
         m_worldState.CreateElement(WorldValues.storedFood, 0);
         m_worldState.CreateElement(WorldValues.axeAvailable, true);
+        m_worldState.CreateElement(WorldValues.woodAvailable, false);
 
         m_worldState.CreateElement(WorldValues.worldAxe, axeObjects[0]); // this class type should be a HoldableItem
 
         m_behvaiourList.Add(new AIHumanBehaviour());
+
+        var agentArray = FindObjectsOfType<GOAPAgent>();
+
+
+        m_allAgents = new List<GOAPAgent>();
+        foreach(var agent in agentArray)
+        {
+            m_allAgents.Add(agent);
+        }
 
         // debugging
         foreach(var agent in m_allAgents)

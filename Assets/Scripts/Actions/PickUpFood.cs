@@ -6,8 +6,9 @@ public class PickUpFood : GOAPAction
 {
     public PickUpFood()
     {
-        preconditions.CreateElement(WorldValues.holdingFood, false);
-        effects.CreateElement(WorldValues.holdingFood, true);
+        preconditions.CreateElement(WorldValues.holdItemType, WorldValues.HoldItem.nothing);
+
+        effects.CreateElement(WorldValues.holdItemType, WorldValues.HoldItem.food);
 
         name = "Pick Up Food";
     }
@@ -15,7 +16,7 @@ public class PickUpFood : GOAPAction
     public override void AddEffects(GOAPWorldState state)
     {
         //base.AddEffects(state);
-        state.SetElementValue(WorldValues.holdingFood, true);
+        state.SetElementValue(WorldValues.holdItemType, WorldValues.HoldItem.food);
     }
 
     public override ActionState PerformAction(GOAPAgent agent, GOAPWorldState worldState)

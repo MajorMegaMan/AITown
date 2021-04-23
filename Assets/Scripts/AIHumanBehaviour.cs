@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class AIHumanBehaviour : GOAPBehaviour
 {
-    float minHunger = 90.0f;
+    float minHunger = 20.0f;
+    float hungerSpeed = 5.0f;
 
     public AIHumanBehaviour()
     {
         // Initialise Action List
+        m_actions.Add(new ChopWood());
         m_actions.Add(new PickUpWood());
         m_actions.Add(new StoreWood());
 
@@ -19,42 +21,54 @@ public class AIHumanBehaviour : GOAPBehaviour
         m_actions.Add(new DropAxe());
 
         // Initialise WorldStateNeeds
-        m_selfishNeeds.CreateElement(WorldValues.holdingWood, false);
-        m_selfishNeeds.CreateElement(WorldValues.holdingFood, false);
+        m_selfishNeeds.CreateElement(WorldValues.holdItemType, WorldValues.HoldItem.nothing);
+
         m_selfishNeeds.CreateElement(WorldValues.hunger, 100.0f);
         m_selfishNeeds.CreateElement(WorldValues.hasProcessedHunger, false);
 
-        m_selfishNeeds.CreateElement(WorldValues.holdingAxe, false);
     }
 
     public override GOAPWorldState FindGoal(GOAPWorldState agentWorldState)
     {
-        GOAPWorldState goal = new GOAPWorldState(agentWorldState);
+        GOAPWorldState targetGoal = new GOAPWorldState();
 
         if (agentWorldState.GetElementValue<float>(WorldValues.hunger) < minHunger)
         {
             // This guy is hungry
             // Get food to eat
-            goal.SetElementValue(WorldValues.hunger, 100.0f);
-            goal.SetElementValue(WorldValues.hasProcessedHunger, false);
-        }
-        else
-        {
-            // Get wood for storage
-            var data = goal.GetData(WorldValues.storedWood);
-            int woodVal = data.ConvertValue<int>();
-            woodVal++;
-            data.value = woodVal;
+            targetGoal.CreateElement(WorldValues.hunger, 100.0f);
         }
 
-        return goal;
+        else if(agentWorldState.GetElementValue<bool>(WorldValues.axeAvailable))
+        {
+            // Get wood for storage
+            int woodVal = agentWorldState.GetElementValue<int>(WorldValues.storedWood);
+            woodVal++;
+
+            targetGoal.CreateElement(WorldValues.storedWood, woodVal);
+        }
+
+        else
+        {
+            // dick around for now
+            return null;
+
+            //// Get food for storage
+            //int foodVal = agentWorldState.GetElementValue<int>(WorldValues.storedFood);
+            //foodVal++;
+            //
+            //targetGoal.CreateElement(WorldValues.storedFood, foodVal);
+        }
+
+        //return goal;
+        return targetGoal;
     }
 
     public override void Update(GOAPAgent agent, GOAPWorldState agentSelfishNeeds)
     {
         var data = agentSelfishNeeds.GetData(WorldValues.hunger);
         float hungerVal = data.ConvertValue<float>();
-        hungerVal -= Time.deltaTime;
+        hungerVal -= Time.deltaTime * hungerSpeed;
         hungerVal = Mathf.Clamp(hungerVal, 0.0f, 100.0f);
         data.value = hungerVal;
 

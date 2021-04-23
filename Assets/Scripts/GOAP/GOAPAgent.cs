@@ -31,6 +31,7 @@ public class GOAPAgent : MonoBehaviour
     public Transform foodBushTarget;
 
     public float hunger = 100.0f;
+    public WorldValues.HoldItem item = WorldValues.HoldItem.nothing;
 
     private void Awake()
     {
@@ -63,6 +64,7 @@ public class GOAPAgent : MonoBehaviour
 
         // debugging
         hunger = m_agentWorldState.GetElementValue<float>(WorldValues.hunger);
+        item = m_agentWorldState.GetElementValue<WorldValues.HoldItem>(WorldValues.holdItemType);
     }
 
     public void SetWorldState(GOAPWorldState worldState)
@@ -174,7 +176,7 @@ public class GOAPAgent : MonoBehaviour
 
     void PerformAction()
     {
-        Debug.Log("Performing Action");
+        Debug.Log("Performing Action : " + m_currentAction.GetName());
         // Check result of performing action
         switch (m_currentAction.PerformAction(this, m_combinedWorldState))
         {

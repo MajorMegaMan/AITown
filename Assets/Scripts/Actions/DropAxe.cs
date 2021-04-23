@@ -6,8 +6,9 @@ public class DropAxe : GOAPAction
 {
     public DropAxe()
     {
-        preconditions.CreateElement(WorldValues.holdingAxe, true);
-        effects.CreateElement(WorldValues.holdingAxe, false);
+        preconditions.CreateElement(WorldValues.holdItemType, WorldValues.HoldItem.axe);
+
+        effects.CreateElement(WorldValues.holdItemType, WorldValues.HoldItem.nothing);
         effects.CreateElement(WorldValues.axeAvailable, true);
 
         name = "Drop Axe";
@@ -16,7 +17,7 @@ public class DropAxe : GOAPAction
     public override void AddEffects(GOAPWorldState state)
     {
         //base.AddEffects(state);
-        state.SetElementValue(WorldValues.holdingAxe, false);
+        state.SetElementValue(WorldValues.holdItemType, WorldValues.HoldItem.nothing);
         state.SetElementValue(WorldValues.axeAvailable, true);
     }
 
@@ -31,6 +32,7 @@ public class DropAxe : GOAPAction
 
     public override bool EnterAction(GOAPAgent agent)
     {
+        agent.actionObject = agent.GetWorldState().GetElementValue<GameObject>(WorldValues.worldAxe);
         return true;
     }
 

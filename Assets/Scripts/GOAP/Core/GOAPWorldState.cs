@@ -35,6 +35,14 @@ public class GOAPWorldState
         return false;
     }
 
+    public void AddOtherWorldState(GOAPWorldState otherState)
+    {
+        foreach(var data in otherState.hashSet)
+        {
+            CreateElement(data.name, data.value);
+        }
+    }
+
     public List<string> GetNames()
     {
         return new List<string>(names);
@@ -139,6 +147,12 @@ public class WorldData
     public Type ConvertValue<Type>()
     {
         return (Type)value;
+    }
+
+    public void SetDefaultValue<Type>()
+    {
+        Type defaultVal = default;
+        value = defaultVal;
     }
 }
 

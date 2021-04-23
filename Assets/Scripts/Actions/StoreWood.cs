@@ -6,8 +6,8 @@ public class StoreWood : GOAPAction
 {
     public StoreWood()
     {
-        preconditions.CreateElement(WorldValues.holdingWood, true);
-        effects.CreateElement(WorldValues.holdingWood, false);
+        preconditions.CreateElement(WorldValues.holdItemType, WorldValues.HoldItem.wood);
+        effects.CreateElement(WorldValues.holdItemType, WorldValues.HoldItem.nothing);
         effects.CreateElement(WorldValues.storedWood, 1);
 
         name = "Store Wood";
@@ -16,7 +16,7 @@ public class StoreWood : GOAPAction
     public override void AddEffects(GOAPWorldState state)
     {
         //base.AddEffects(state);
-        state.SetElementValue(WorldValues.holdingWood, false);
+        state.SetElementValue(WorldValues.holdItemType, WorldValues.HoldItem.nothing);
         var data = state.GetData(WorldValues.storedWood);
         int woodVal = data.ConvertValue<int>();
         woodVal++;
