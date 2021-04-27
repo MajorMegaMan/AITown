@@ -7,11 +7,11 @@ public class AIHumanBehaviour : GOAPBehaviour
     float minHunger = 20.0f;
     float hungerSpeed = 5.0f;
 
-    public AIHumanBehaviour()
+    public AIHumanBehaviour(List<GameObject> instantiatedWoodObjects, GameObject woodPrefab)
     {
         // Initialise Action List
-        m_actions.Add(new ChopWood());
-        m_actions.Add(new PickUpWood());
+        m_actions.Add(new ChopWood(instantiatedWoodObjects, woodPrefab));
+        m_actions.Add(new PickUpWood(instantiatedWoodObjects));
         m_actions.Add(new StoreWood());
 
         m_actions.Add(new PickUpFood());
@@ -22,6 +22,7 @@ public class AIHumanBehaviour : GOAPBehaviour
 
         // Initialise WorldStateNeeds
         m_selfishNeeds.CreateElement(WorldValues.holdItemType, WorldValues.HoldItem.nothing);
+        m_selfishNeeds.CreateElement(WorldValues.holdItemObject, null);
 
         m_selfishNeeds.CreateElement(WorldValues.hunger, 100.0f);
         m_selfishNeeds.CreateElement(WorldValues.hasProcessedHunger, false);

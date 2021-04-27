@@ -28,11 +28,20 @@ public class HoldableItem : MonoBehaviour
     {
         followTarget = target;
         body.isKinematic = true;
+
+        transform.rotation = target.transform.rotation;
     }
 
     public void DetachObject()
     {
         followTarget = null;
         body.isKinematic = false;
+
+        float rand = Random.Range(0.0f, 360.0f);
+        rand -= 180.0f;
+
+        Vector3 direction = Quaternion.AngleAxis(rand, Vector3.up) * Vector3.forward;
+
+        body.AddForce(direction * 5, ForceMode.Impulse);
     }
 }

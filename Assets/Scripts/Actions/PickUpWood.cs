@@ -4,40 +4,87 @@ using UnityEngine;
 
 public class PickUpWood : GOAPAction
 {
-    public PickUpWood()
+    List<GameObject> instantiatedWoodObjects;
+    public PickUpWood(List<GameObject> instantiatedWoodObjects)
     {
         preconditions.CreateElement(WorldValues.holdItemType, WorldValues.HoldItem.nothing);
         preconditions.CreateElement(WorldValues.woodAvailable, true);
         //preconditions.CreateElement(WorldValues.holdingAxe, true);
         effects.CreateElement(WorldValues.holdItemType, WorldValues.HoldItem.wood);
         effects.CreateElement(WorldValues.woodAvailable, false);
+        effects.CreateElement(WorldValues.worldWoodCount, -1);
 
         name = "Pick Up Wood";
+
+        this.instantiatedWoodObjects = instantiatedWoodObjects;
     }
 
     public override void AddEffects(GOAPWorldState state)
     {
         //base.AddEffects(state);
         state.SetElementValue(WorldValues.holdItemType, WorldValues.HoldItem.wood);
-        state.SetElementValue(WorldValues.woodAvailable, false);
+        
+        var woodCountData = state.GetData(WorldValues.worldWoodCount);
+        int value = woodCountData.ConvertValue<int>();
+        value--;
+        woodCountData.value = value;
+
+        bool isWoodAvailable = value > 0;
+        state.SetElementValue(WorldValues.woodAvailable, isWoodAvailable);
     }
 
     public override ActionState PerformAction(GOAPAgent agent, GOAPWorldState worldState)
     {
-        AddEffects(worldState);
-        return ActionState.completed;
+        if(worldState.GetElementValue<bool>(WorldValues.woodAvailable))
+        {
+            AddEffects(worldState);
+            HoldableItem woodItem = agent.actionObject.GetComponent<HoldableItem>();
+            woodItem.AttachObject(agent.gameObject.transform);
+
+            instantiatedWoodObjects.Remove(agent.actionObject);
+            worldState.SetElementValue(WorldValues.holdItemObject, agent.actionObject);
+            return ActionState.completed;
+        }
+        else
+        {
+            return ActionState.interrupt;
+        }
     }
 
     public override bool EnterAction(GOAPAgent agent)
     {
+        if(instantiatedWoodObjects.Count == 0)
+        {
+            return false;
+        }
+
         // find wood to pick up
+        Vector3 agentPosition = agent.gameObject.transform.position;
+
+        GameObject closestWood = instantiatedWoodObjects[0];
+        float closestDist = (closestWood.transform.position - agentPosition).magnitude;
+
+        for(int i = 1; i < instantiatedWoodObjects.Count; i++)
+        {
+            GameObject wood = instantiatedWoodObjects[i];
+            float dist = (wood.transform.position - agentPosition).magnitude;
+
+            if(dist < closestDist)
+            {
+                closestWood = wood;
+                closestDist = dist;
+            }
+        }
+
+        agent.actionObject = closestWood;
+
         // currently just represented by a bool
         return true;
     }
 
     public override bool IsInRange(GOAPAgent agent)
     {
-        //return (agent.transform.position - agent.actionObject.transform.position).magnitude < agent.stoppingDistance;
-        return true;
+        return (agent.transform.position - agent.actionObject.transform.position).magnitude < agent.stoppingDistance;
+        //return true;
     }
 }

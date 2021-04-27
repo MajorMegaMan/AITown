@@ -13,6 +13,8 @@ public static class WorldValues
     public static string worldAxe { get; private set; } = "world_axe";
     public static string axeAvailable { get; private set; } = "axe_available";
     public static string woodAvailable { get; private set; } = "wood_available";
+    public static string worldWoodCount { get; private set; } = "world_wood_count";
+
 
     // Agent Specific values
     public static string holdItemType { get; private set; } = "hold_item_type";

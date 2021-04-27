@@ -295,6 +295,7 @@ MonoBehaviour:
   woodStoreTarget: {fileID: 491993540}
   foodBushTarget: {fileID: 1351932811}
   hunger: 100
+  item: 0
 --- !u!195 &482095781
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1006,6 +1007,7 @@ MonoBehaviour:
   woodStoreTarget: {fileID: 491993540}
   foodBushTarget: {fileID: 1351932811}
   hunger: 100
+  item: 0
 --- !u!195 &1207404735
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1059,6 +1061,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   axeObjects:
   - {fileID: 2095590872}
+  woodObjects: []
+  woodPrefab: {fileID: 8470114079898124337, guid: d085276a1759c624e81371f02513c025, type: 3}
+  storedWood: 0
+  storedFood: 0
+  axeAvailable: 1
+  woodAvailable: 0
+  worldWoodCount: 0
+  worldAxe: {fileID: 0}
 --- !u!4 &1219541496
 Transform:
   m_ObjectHideFlags: 0

@@ -32,6 +32,7 @@ public class GOAPAgent : MonoBehaviour
 
     public float hunger = 100.0f;
     public WorldValues.HoldItem item = WorldValues.HoldItem.nothing;
+    public GameObject holdItemObject = null;
 
     private void Awake()
     {
@@ -65,6 +66,7 @@ public class GOAPAgent : MonoBehaviour
         // debugging
         hunger = m_agentWorldState.GetElementValue<float>(WorldValues.hunger);
         item = m_agentWorldState.GetElementValue<WorldValues.HoldItem>(WorldValues.holdItemType);
+        holdItemObject = m_agentWorldState.GetElementValue<GameObject>(WorldValues.holdItemObject);
     }
 
     public void SetWorldState(GOAPWorldState worldState)

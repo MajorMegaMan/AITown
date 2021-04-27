@@ -32,6 +32,8 @@ public class PickUpAxe : GOAPAction
         var axeItem = agent.actionObject.GetComponent<HoldableItem>();
         axeItem.AttachObject(agent.gameObject.transform);
 
+        worldState.SetElementValue(WorldValues.holdItemObject, agent.actionObject);
+
         AddEffects(worldState);
         return ActionState.completed;
     }

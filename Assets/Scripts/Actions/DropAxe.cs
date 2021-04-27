@@ -26,6 +26,8 @@ public class DropAxe : GOAPAction
         var axeItem = agent.actionObject.GetComponent<HoldableItem>();
         axeItem.DetachObject();
 
+        worldState.SetElementValue(WorldValues.holdItemObject, null);
+
         AddEffects(worldState);
         return ActionState.completed;
     }

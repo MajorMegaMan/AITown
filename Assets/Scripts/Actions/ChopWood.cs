@@ -4,23 +4,37 @@ using UnityEngine;
 
 public class ChopWood : GOAPAction
 {
-    public ChopWood()
+    List<GameObject> instantiatedWoodObjects;
+    GameObject woodPrefab;
+
+    public ChopWood(List<GameObject> instantiatedWoodObjects, GameObject woodPrefab)
     {
         preconditions.CreateElement(WorldValues.holdItemType, WorldValues.HoldItem.axe);
         effects.CreateElement(WorldValues.woodAvailable, true);
+        effects.CreateElement(WorldValues.worldWoodCount, +1);
 
         name = "Chop Wood";
+
+        this.instantiatedWoodObjects = instantiatedWoodObjects;
+        this.woodPrefab = woodPrefab;
     }
 
     public override void AddEffects(GOAPWorldState state)
     {
         state.SetElementValue(WorldValues.woodAvailable, true);
+
+        var woodCountData = state.GetData(WorldValues.worldWoodCount);
+        int value = woodCountData.ConvertValue<int>();
+        value++;
+        woodCountData.value = value;
     }
 
     public override ActionState PerformAction(GOAPAgent agent, GOAPWorldState worldState)
     {
         // Instantiate wood object
-
+        GameObject newWood = GameObject.Instantiate(woodPrefab);
+        newWood.transform.position = agent.transform.position + (Vector3.up * 2.5f);
+        instantiatedWoodObjects.Add(newWood);
         AddEffects(worldState);
         return ActionState.completed;
     }
