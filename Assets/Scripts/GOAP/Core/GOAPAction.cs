@@ -78,4 +78,9 @@ public abstract class GOAPAction
     public abstract bool EnterAction(GOAPAgent agent);
 
     public abstract bool IsInRange(GOAPAgent agent);
+
+    public bool CanPerformAction(GOAPWorldState worldState)
+    {
+        return worldState.CheckState(preconditions);
+    }
 }

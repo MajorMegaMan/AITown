@@ -117,12 +117,27 @@ public class GOAPAgent : MonoBehaviour
 
     void MoveTo()
     {
-        if(navAgent.pathPending)
+        if(!m_currentAction.CanPerformAction(m_combinedWorldState))
+        {
+            // cannot perform current action, so stop moving to it and find a new plan
+            FindPlan();
+            StopNavigating();
+            return;
+        }
+        else
+        {
+            m_actionTargetLocation = actionObject.transform.position;
+            SetTargetPosition(m_actionTargetLocation);
+        }
+
+        // if agent is calculating a path need to wait until it has finished
+        if (navAgent.pathPending)
         {
             return;
         }
+
         // Check distance
-        if(navAgent.remainingDistance < stoppingDistance)
+        if (navAgent.remainingDistance < stoppingDistance)
         {
             // reached stopping point
             StopNavigating();

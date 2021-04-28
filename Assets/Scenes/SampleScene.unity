@@ -296,6 +296,7 @@ MonoBehaviour:
   foodBushTarget: {fileID: 1351932811}
   hunger: 100
   item: 0
+  holdItemObject: {fileID: 0}
 --- !u!195 &482095781
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1008,6 +1009,7 @@ MonoBehaviour:
   foodBushTarget: {fileID: 1351932811}
   hunger: 100
   item: 0
+  holdItemObject: {fileID: 0}
 --- !u!195 &1207404735
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1363,7 +1365,7 @@ Transform:
   m_GameObject: {fileID: 1501551628}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.9161694, y: 1.2460663, z: 0.047261238}
-  m_LocalScale: {x: 20, y: 1, z: 20}
+  m_LocalScale: {x: 25, y: 1, z: 25}
   m_Children: []
   m_Father: {fileID: 328009346}
   m_RootOrder: 0
