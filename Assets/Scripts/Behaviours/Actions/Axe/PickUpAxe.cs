@@ -6,10 +6,12 @@ public class PickUpAxe : GOAPAction
 {
     public PickUpAxe()
     {
-        preconditions.CreateElement(WorldValues.holdItemType, WorldValues.HoldItem.nothing);
+        preconditions.CreateElement(WorldValues.isHoldingItem, false);
+        preconditions.CreateElement(WorldValues.holdItemType, WorldValues.HoldItemType.nothing);
         preconditions.CreateElement(WorldValues.axeAvailable, true);
 
-        effects.CreateElement(WorldValues.holdItemType, WorldValues.HoldItem.axe);
+        effects.CreateElement(WorldValues.isHoldingItem, true);
+        effects.CreateElement(WorldValues.holdItemType, WorldValues.HoldItemType.axe);
         effects.CreateElement(WorldValues.axeAvailable, false);
 
         name = "Pick Up Axe";
@@ -18,8 +20,10 @@ public class PickUpAxe : GOAPAction
     public override void AddEffects(GOAPWorldState state)
     {
         //base.AddEffects(state);
-        state.SetElementValue(WorldValues.holdItemType, WorldValues.HoldItem.axe);
+        state.SetElementValue(WorldValues.holdItemType, WorldValues.HoldItemType.axe);
         state.SetElementValue(WorldValues.axeAvailable, false);
+
+        state.CreateElement(WorldValues.isHoldingItem, true);
     }
 
     public override ActionState PerformAction(GOAPAgent agent, GOAPWorldState worldState)

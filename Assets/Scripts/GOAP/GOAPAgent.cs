@@ -29,10 +29,11 @@ public class GOAPAgent : MonoBehaviour
     public Transform treeTarget;
     public Transform woodStoreTarget;
     public Transform foodBushTarget;
+    public Transform foodStoreTarget;
 
-    public float hunger = 100.0f;
-    public WorldValues.HoldItem item = WorldValues.HoldItem.nothing;
-    public GameObject holdItemObject = null;
+    [ReadOnly] public float hunger = 100.0f;
+    [ReadOnly] public WorldValues.HoldItemType item = WorldValues.HoldItemType.nothing;
+    [ReadOnly] public GameObject holdItemObject = null;
 
     private void Awake()
     {
@@ -65,7 +66,7 @@ public class GOAPAgent : MonoBehaviour
 
         // debugging
         hunger = m_agentWorldState.GetElementValue<float>(WorldValues.hunger);
-        item = m_agentWorldState.GetElementValue<WorldValues.HoldItem>(WorldValues.holdItemType);
+        item = m_agentWorldState.GetElementValue<WorldValues.HoldItemType>(WorldValues.holdItemType);
         holdItemObject = m_agentWorldState.GetElementValue<GameObject>(WorldValues.holdItemObject);
     }
 

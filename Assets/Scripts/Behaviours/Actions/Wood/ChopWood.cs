@@ -9,7 +9,7 @@ public class ChopWood : GOAPAction
 
     public ChopWood(List<GameObject> instantiatedWoodObjects, GameObject woodPrefab)
     {
-        preconditions.CreateElement(WorldValues.holdItemType, WorldValues.HoldItem.axe);
+        preconditions.CreateElement(WorldValues.holdItemType, WorldValues.HoldItemType.axe);
         effects.CreateElement(WorldValues.woodAvailable, true);
         effects.CreateElement(WorldValues.worldWoodCount, +1);
 

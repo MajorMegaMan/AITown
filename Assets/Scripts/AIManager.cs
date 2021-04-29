@@ -12,17 +12,19 @@ public class AIManager : MonoBehaviour
 
     public List<GameObject> axeObjects;
     public List<GameObject> woodObjects = new List<GameObject>();
+    public List<GameObject> foodObjects = new List<GameObject>();
 
     [Header("Prefabs")]
     public GameObject woodPrefab;
+    public GameObject foodPrefab;
 
     [Header("Debug values")]
-    public int storedWood = 0;
-    public int storedFood = 0;
-    public bool axeAvailable = true;
-    public bool woodAvailable = false;
-    public int worldWoodCount = 0;
-    public GameObject worldAxe = null;
+    [ReadOnly] public int storedWood = 0;
+    [ReadOnly] public int storedFood = 0;
+    [ReadOnly] public bool axeAvailable = true;
+    [ReadOnly] public bool woodAvailable = false;
+    [ReadOnly] public int worldWoodCount = 0;
+    [ReadOnly] public GameObject worldAxe = null;
 
     private void Awake()
     {
@@ -33,15 +35,22 @@ public class AIManager : MonoBehaviour
         //    m_worldState.CreateElement(WorldValues.worldValueList[i], default);
         //}
 
+
+        // wood values
         m_worldState.CreateElement(WorldValues.storedWood, 0);
-        m_worldState.CreateElement(WorldValues.storedFood, 0);
-        m_worldState.CreateElement(WorldValues.axeAvailable, true);
         m_worldState.CreateElement(WorldValues.woodAvailable, false);
         m_worldState.CreateElement(WorldValues.worldWoodCount, 0);
 
+        // food values
+        m_worldState.CreateElement(WorldValues.storedFood, 0);
+        m_worldState.CreateElement(WorldValues.foodAvailable, false);
+        m_worldState.CreateElement(WorldValues.worldFoodCount, 0);
+
+        // axe values
+        m_worldState.CreateElement(WorldValues.axeAvailable, true);
         m_worldState.CreateElement(WorldValues.worldAxe, axeObjects[0]); // this class type should be a HoldableItem
 
-        m_behvaiourList.Add(new AIHumanBehaviour(woodObjects, woodPrefab));
+        m_behvaiourList.Add(new AIHumanBehaviour(woodObjects, woodPrefab, foodObjects, foodPrefab));
 
         var agentArray = FindObjectsOfType<GOAPAgent>();
 

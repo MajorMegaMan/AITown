@@ -9,6 +9,8 @@ public static class GOAPPlanner
     static List<Node> outcomeTree = new List<Node>();
     static List<Node> finalGoals = new List<Node>();
 
+    static int runningTotalCap = 20;
+
     static void Reset()
     {
         foundGoal = false;
@@ -44,6 +46,10 @@ public static class GOAPPlanner
         if (finalGoals.Count > 0)
         {
             smallestCost = finalGoals[0];
+        }
+        else
+        {
+            return new Queue<GOAPAction>();
         }
 
         for (int i = 0; i < finalGoals.Count; i++)
@@ -93,7 +99,7 @@ public static class GOAPPlanner
 
         foreach (var act in usableActions)
         {
-            if (foundGoal && lowCost < node.runningTotal)
+            if (foundGoal && lowCost < node.runningTotal || node.runningTotal > runningTotalCap)
             {
                 break;
             }
