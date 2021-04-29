@@ -1,44 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.AI;
+//using UnityEngine;
+//using UnityEngine.AI;
 
-public class GOAPAgent : MonoBehaviour
+public class GOAPAgent
 {
-    public float stoppingDistance = 0.5f;
-
-    [HideInInspector] public NavMeshAgent navAgent;
-
-    Vector3 m_targetPosition = Vector3.zero;
-
     StateMachine m_stateMachine = new StateMachine();
 
     // GOAP
     GOAPWorldState m_combinedWorldState;
-    GOAPWorldState m_agentWorldState;
+    GOAPWorldState m_agentWorldState = null;
     Queue<GOAPAction> m_plan = new Queue<GOAPAction>();
     GOAPBehaviour m_behaviour;
 
     GOAPAction m_currentAction;
-    // Action var
-    public Vector3 m_actionTargetLocation = Vector3.zero;
-    public GameObject actionObject = null;
 
-    //Debugging
-    [Header("Debugging")]
-    public Transform treeTarget;
-    public Transform woodStoreTarget;
-    public Transform foodBushTarget;
-    public Transform foodStoreTarget;
-
-    [ReadOnly] public float hunger = 100.0f;
-    [ReadOnly] public WorldValues.HoldItemType item = WorldValues.HoldItemType.nothing;
-    [ReadOnly] public GameObject holdItemObject = null;
-
-    private void Awake()
+    public enum State
     {
-        navAgent = GetComponent<NavMeshAgent>();
+        PLANNING,
+        MOVE_TO,
+        PERFORM_ACTION
+    }
 
+    private void Init()
+    {
         // initialise states
         m_stateMachine.AddStates(3);
         m_stateMachine.SetStateFunc(0, DecideState);
@@ -46,14 +31,10 @@ public class GOAPAgent : MonoBehaviour
         m_stateMachine.SetStateFunc(2, PerformAction);
 
         m_stateMachine.SetState(0);
-
-        // Create World State
-        //m_agentWorldState.CreateElement(WorldValues.holdingWood, false);
-        //m_agentWorldState.CreateElement(WorldValues.storedWood, 0);
     }
 
     // Start is called before the first frame update
-    void Start()
+    public void SetSelfishWorldState()
     {
         m_agentWorldState = m_behaviour.GetSelfishNeeds();
     }
@@ -63,16 +44,16 @@ public class GOAPAgent : MonoBehaviour
     {
         m_behaviour.Update(this, m_agentWorldState);
         m_stateMachine.CallState();
-
-        // debugging
-        hunger = m_agentWorldState.GetElementValue<float>(WorldValues.hunger);
-        item = m_agentWorldState.GetElementValue<WorldValues.HoldItemType>(WorldValues.holdItemType);
-        holdItemObject = m_agentWorldState.GetElementValue<GameObject>(WorldValues.holdItemObject);
     }
 
-    public void SetWorldState(GOAPWorldState worldState)
+    public bool SetWorldState(GOAPWorldState worldState)
     {
-        m_combinedWorldState = GOAPWorldState.CombineWithReferences(worldState, m_agentWorldState);
+        if(m_agentWorldState != null)
+        {
+            m_combinedWorldState = GOAPWorldState.CombineWithReferences(worldState, m_agentWorldState);
+            return true;
+        }
+        return false;
     }
 
     // returns a new worldstate from the cobined world and this agents selfish needs
@@ -90,30 +71,9 @@ public class GOAPAgent : MonoBehaviour
         m_plan.Clear();
     }
 
-    void SetPathToTargetPosition()
+    public void SetState(State desiredState)
     {
-        Debug.Log("settingPath");
-        StartNavigating();
-        navAgent.SetDestination(m_targetPosition);
-        // Start checking for path
-        // Set state to moving
-        m_stateMachine.SetState(1);
-    }
-
-    void SetTargetPosition(Vector3 targetPosition)
-    {
-        m_targetPosition = targetPosition;
-        SetPathToTargetPosition();
-    }
-
-    void StartNavigating()
-    {
-        navAgent.isStopped = false;
-    }
-
-    void StopNavigating()
-    {
-        navAgent.isStopped = true;
+        m_stateMachine.SetState((int)desiredState);
     }
 
     void MoveTo()
@@ -127,6 +87,7 @@ public class GOAPAgent : MonoBehaviour
         }
         else
         {
+            // StartNavigating
             m_actionTargetLocation = actionObject.transform.position;
             SetTargetPosition(m_actionTargetLocation);
         }
@@ -148,9 +109,18 @@ public class GOAPAgent : MonoBehaviour
         }
     }
 
+    void StopNavigating()
+    {
+
+    }
+
+    void UpdateNavigation()
+    {
+
+    }
+
     public void FindPlan()
     {
-        Debug.Log("Getting Plan");
         // Get GOAPplan
         // need to find goal
         m_plan = m_behaviour.CalcPlan(m_combinedWorldState);
@@ -194,7 +164,6 @@ public class GOAPAgent : MonoBehaviour
 
     void PerformAction()
     {
-        Debug.Log("Performing Action : " + m_currentAction.GetName());
         // Check result of performing action
         switch (m_currentAction.PerformAction(this, m_combinedWorldState))
         {
