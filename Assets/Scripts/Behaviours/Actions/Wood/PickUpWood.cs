@@ -6,7 +6,7 @@ public class PickUpWood : GOAPAction
 {
     List<GameObject> instantiatedWoodObjects;
 
-    public PickUpWood(List<GameObject> instantiatedWoodObjects)
+    public PickUpWood(object instantiatedWoodObjects)
     {
         preconditions.CreateElement(WorldValues.holdItemType, WorldValues.HoldItemType.nothing);
         preconditions.CreateElement(WorldValues.woodAvailable, true);
@@ -20,7 +20,7 @@ public class PickUpWood : GOAPAction
 
         name = "Pick Up Wood";
 
-        this.instantiatedWoodObjects = instantiatedWoodObjects;
+        this.instantiatedWoodObjects = (List <GameObject>)instantiatedWoodObjects;
     }
 
     public override void AddEffects(GOAPWorldState state)

@@ -7,7 +7,7 @@ public class GatherFood : GOAPAction
     List<GameObject> instantiatedFoodObjects;
     GameObject foodPrefab;
 
-    public GatherFood(List<GameObject> instantiatedFoodObjects, GameObject foodPrefab)
+    public GatherFood(object instantiatedFoodObjects, object foodPrefab)
     {
         preconditions.CreateElement(WorldValues.holdItemType, WorldValues.HoldItemType.nothing);
         effects.CreateElement(WorldValues.foodAvailable, true);
@@ -15,8 +15,8 @@ public class GatherFood : GOAPAction
 
         name = "Gather Food";
 
-        this.instantiatedFoodObjects = instantiatedFoodObjects;
-        this.foodPrefab = foodPrefab;
+        this.instantiatedFoodObjects = (List<GameObject>)instantiatedFoodObjects;
+        this.foodPrefab = (GameObject)foodPrefab;
     }
 
     public override void AddEffects(GOAPWorldState state)

@@ -6,7 +6,7 @@ public class PickUpFood : GOAPAction
 {
     List<GameObject> instantiatedFoodObjects;
 
-    public PickUpFood(List<GameObject> instantiatedFoodObjects)
+    public PickUpFood(object instantiatedFoodObjects)
     {
         preconditions.CreateElement(WorldValues.holdItemType, WorldValues.HoldItemType.nothing);
         preconditions.CreateElement(WorldValues.foodAvailable, true);
@@ -20,7 +20,7 @@ public class PickUpFood : GOAPAction
 
         name = "Pick Up Food";
 
-        this.instantiatedFoodObjects = instantiatedFoodObjects;
+        this.instantiatedFoodObjects = (List<GameObject>)instantiatedFoodObjects;
     }
 
     public override void AddEffects(GOAPWorldState state)

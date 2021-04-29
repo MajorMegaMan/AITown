@@ -7,7 +7,7 @@ public class ChopWood : GOAPAction
     List<GameObject> instantiatedWoodObjects;
     GameObject woodPrefab;
 
-    public ChopWood(List<GameObject> instantiatedWoodObjects, GameObject woodPrefab)
+    public ChopWood(object instantiatedWoodObjects, object woodPrefab)
     {
         preconditions.CreateElement(WorldValues.holdItemType, WorldValues.HoldItemType.axe);
         effects.CreateElement(WorldValues.woodAvailable, true);
@@ -15,8 +15,8 @@ public class ChopWood : GOAPAction
 
         name = "Chop Wood";
 
-        this.instantiatedWoodObjects = instantiatedWoodObjects;
-        this.woodPrefab = woodPrefab;
+        this.instantiatedWoodObjects = (List<GameObject>)instantiatedWoodObjects;
+        this.woodPrefab = (GameObject)woodPrefab;
     }
 
     public override void AddEffects(GOAPWorldState state)
