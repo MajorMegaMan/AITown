@@ -2,13 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+using U_GOAPAgent = GOAPAgent<UnityEngine.GameObject>;
+using U_GOAPBehaviour = GOAPBehaviour<UnityEngine.GameObject>;
+
+
 public class AIManager : MonoBehaviour
 {
+    
     GOAPWorldState m_worldState = new GOAPWorldState();
 
-    List<GOAPAgent> m_allAgents;// = new List<GOAPAgent>();
+    List<AIAgent> m_allAgents;// = new List<GOAPAgent>();
 
-    List<GOAPBehaviour> m_behvaiourList = new List<GOAPBehaviour>();
+    List<U_GOAPBehaviour> m_behvaiourList = new List<U_GOAPBehaviour>();
 
     public List<GameObject> axeObjects;
     public List<GameObject> woodObjects = new List<GameObject>();
@@ -52,10 +58,10 @@ public class AIManager : MonoBehaviour
 
         m_behvaiourList.Add(new AIHumanBehaviour(woodObjects, woodPrefab, foodObjects, foodPrefab));
 
-        var agentArray = FindObjectsOfType<GOAPAgent>();
+        var agentArray = FindObjectsOfType<AIAgent>();
 
 
-        m_allAgents = new List<GOAPAgent>();
+        m_allAgents = new List<AIAgent>();
         foreach(var agent in agentArray)
         {
             m_allAgents.Add(agent);

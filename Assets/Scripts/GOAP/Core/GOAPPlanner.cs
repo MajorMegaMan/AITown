@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class GOAPPlanner
+public static class GOAPPlanner<GameObjectRef>
 {
     static bool foundGoal = false;
     static int lowCost = int.MaxValue;
@@ -19,11 +19,11 @@ public static class GOAPPlanner
         finalGoals.Clear();
     }
 
-    public static Queue<GOAPAction> CalcPlan(GOAPWorldState currentWorldstate, GOAPWorldState goal, List<GOAPAction> actions)
+    public static Queue<GOAPAction<GameObjectRef>> CalcPlan(GOAPWorldState currentWorldstate, GOAPWorldState goal, List<GOAPAction<GameObjectRef>> actions)
     {
         if(goal == null)
         {
-            return new Queue<GOAPAction>();
+            return new Queue<GOAPAction<GameObjectRef>>();
         }
 
         Reset();
@@ -49,7 +49,7 @@ public static class GOAPPlanner
         }
         else
         {
-            return new Queue<GOAPAction>();
+            return new Queue<GOAPAction<GameObjectRef>>();
         }
 
         for (int i = 0; i < finalGoals.Count; i++)
@@ -60,7 +60,7 @@ public static class GOAPPlanner
             }
         }
 
-        List<GOAPAction> planList = new List<GOAPAction>();
+        List<GOAPAction<GameObjectRef>> planList = new List<GOAPAction<GameObjectRef>>();
 
         Node current = smallestCost;
         while (current != start && current != null)
@@ -70,7 +70,7 @@ public static class GOAPPlanner
             current = current.parent;
         }
 
-        Queue<GOAPAction> result = new Queue<GOAPAction>();
+        Queue<GOAPAction<GameObjectRef>> result = new Queue<GOAPAction<GameObjectRef>>();
         foreach (var act in planList)
         {
             result.Enqueue(act);
@@ -79,9 +79,9 @@ public static class GOAPPlanner
         return result;
     }
 
-    public static List<GOAPAction> GetUsableActions(GOAPWorldState currentWorldstate, List<GOAPAction> actions)
+    public static List<GOAPAction<GameObjectRef>> GetUsableActions(GOAPWorldState currentWorldstate, List<GOAPAction<GameObjectRef>> actions)
     {
-        List<GOAPAction> usableActions = new List<GOAPAction>();
+        List<GOAPAction<GameObjectRef>> usableActions = new List<GOAPAction<GameObjectRef>>();
         foreach (var act in actions)
         {
             if (currentWorldstate.CheckState(act.GetPreconditions()))
@@ -93,9 +93,9 @@ public static class GOAPPlanner
         return usableActions;
     }
 
-    static void BuildTree(Node node, GOAPWorldState goal, List<GOAPAction> actions)
+    static void BuildTree(Node node, GOAPWorldState goal, List<GOAPAction<GameObjectRef>> actions)
     {
-        List<GOAPAction> usableActions = GetUsableActions(node.currentState, actions);
+        List<GOAPAction<GameObjectRef>> usableActions = GetUsableActions(node.currentState, actions);
 
         foreach (var act in usableActions)
         {
@@ -136,10 +136,10 @@ public static class GOAPPlanner
         public int runningTotal;
         public GOAPWorldState currentState;
         // The action that was performed to get to this worldstate
-        public GOAPAction action;
+        public GOAPAction<GameObjectRef> action;
         public bool isGoal = false;
 
-        public Node(Node parent, int runningTotal, GOAPWorldState currentState, GOAPAction action)
+        public Node(Node parent, int runningTotal, GOAPWorldState currentState, GOAPAction<GameObjectRef> action)
         {
             this.parent = parent;
             this.runningTotal = runningTotal;

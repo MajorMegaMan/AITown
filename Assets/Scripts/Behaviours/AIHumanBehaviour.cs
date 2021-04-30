@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AIHumanBehaviour : GOAPBehaviour
+public class AIHumanBehaviour : GOAPBehaviour<GameObject>
 {
     float minHunger = 20.0f;
     float hungerSpeed = 5.0f;
@@ -23,7 +23,6 @@ public class AIHumanBehaviour : GOAPBehaviour
         m_actions.Add(new DropAxe());
 
         // Initialise WorldStateNeeds
-        m_selfishNeeds.CreateElement(WorldValues.isHoldingItem, false);
         m_selfishNeeds.CreateElement(WorldValues.holdItemType, WorldValues.HoldItemType.nothing);
         m_selfishNeeds.CreateElement(WorldValues.holdItemObject, null);
 
@@ -68,7 +67,7 @@ public class AIHumanBehaviour : GOAPBehaviour
         return targetGoal;
     }
 
-    public override void Update(GOAPAgent agent, GOAPWorldState agentSelfishNeeds)
+    public override void Update(GOAPAgent<GameObject> agent, GOAPWorldState agentSelfishNeeds)
     {
         var data = agentSelfishNeeds.GetData(WorldValues.hunger);
         float hungerVal = data.ConvertValue<float>();

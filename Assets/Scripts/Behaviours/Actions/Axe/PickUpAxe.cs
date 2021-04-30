@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PickUpAxe : GOAPAction
+using U_GOAPAgent = GOAPAgent<UnityEngine.GameObject>;
+
+public class PickUpAxe : GOAPAction<GameObject>
 {
     public PickUpAxe()
     {
-        preconditions.CreateElement(WorldValues.isHoldingItem, false);
         preconditions.CreateElement(WorldValues.holdItemType, WorldValues.HoldItemType.nothing);
         preconditions.CreateElement(WorldValues.axeAvailable, true);
 
-        effects.CreateElement(WorldValues.isHoldingItem, true);
         effects.CreateElement(WorldValues.holdItemType, WorldValues.HoldItemType.axe);
         effects.CreateElement(WorldValues.axeAvailable, false);
 
@@ -22,28 +22,32 @@ public class PickUpAxe : GOAPAction
         //base.AddEffects(state);
         state.SetElementValue(WorldValues.holdItemType, WorldValues.HoldItemType.axe);
         state.SetElementValue(WorldValues.axeAvailable, false);
-
-        state.CreateElement(WorldValues.isHoldingItem, true);
     }
 
-    public override ActionState PerformAction(GOAPAgent agent, GOAPWorldState worldState)
+    public override ActionState PerformAction(U_GOAPAgent agent, GOAPWorldState worldState)
     {
         if(!worldState.GetElementValue<bool>(WorldValues.axeAvailable))
         {
             return ActionState.interrupt;
         }
 
-        var axeItem = agent.actionObject.GetComponent<HoldableItem>();
-        axeItem.AttachObject(agent.gameObject.transform);
+        GameObject agentGameObject = agent.GetAgentObject();
+        AIAgent aiAgent = agentGameObject.GetComponent<AIAgent>();
 
-        worldState.SetElementValue(WorldValues.holdItemObject, agent.actionObject);
+        var axeItem = aiAgent.actionObject.GetComponent<HoldableItem>();
+        axeItem.AttachObject(aiAgent.transform);
+
+        worldState.SetElementValue(WorldValues.holdItemObject, aiAgent.actionObject);
 
         AddEffects(worldState);
         return ActionState.completed;
     }
 
-    public override bool EnterAction(GOAPAgent agent)
+    public override bool EnterAction(U_GOAPAgent agent)
     {
+        GameObject agentGameObject = agent.GetAgentObject();
+        AIAgent aiAgent = agentGameObject.GetComponent<AIAgent>();
+
         // This is where the logic to find an axe would go
         GOAPWorldState agentState = agent.GetWorldState();
 
@@ -53,20 +57,23 @@ public class PickUpAxe : GOAPAction
             //HoldableItem axe = agentState.GetElementValue<HoldableItem>(WorldValues.worldAxe);
             //HoldableItem axe = (HoldableItem)(agentState.GetElementValue(WorldValues.worldAxe));
             var obj = agentState.GetElementValue<GameObject>(WorldValues.worldAxe);
-            agent.actionObject = obj;
-            agent.m_actionTargetLocation = agent.actionObject.transform.position;
+            aiAgent.actionObject = obj;
+            aiAgent.m_actionTargetLocation = aiAgent.actionObject.transform.position;
             return true;
         }
         else
         {
-            agent.actionObject = null;
-            agent.m_actionTargetLocation = agent.transform.position;
+            aiAgent.actionObject = null;
+            aiAgent.m_actionTargetLocation = aiAgent.transform.position;
             return false;
         }
     }
 
-    public override bool IsInRange(GOAPAgent agent)
+    public override bool IsInRange(U_GOAPAgent agent)
     {
-        return (agent.transform.position - agent.actionObject.transform.position).magnitude < agent.stoppingDistance;
+        GameObject agentGameObject = agent.GetAgentObject();
+        AIAgent aiAgent = agentGameObject.GetComponent<AIAgent>();
+
+        return (aiAgent.transform.position - aiAgent.actionObject.transform.position).magnitude < aiAgent.stoppingDistance;
     }
 }

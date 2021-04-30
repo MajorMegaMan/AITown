@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DropAxe : GOAPAction
+using U_GOAPAgent = GOAPAgent<UnityEngine.GameObject>;
+
+public class DropAxe : GOAPAction<GameObject>
 {
     public DropAxe()
     {
         preconditions.CreateElement(WorldValues.holdItemType, WorldValues.HoldItemType.axe);
-
-        preconditions.CreateElement(WorldValues.isHoldingItem, true);
-        effects.CreateElement(WorldValues.isHoldingItem, false);
 
         effects.CreateElement(WorldValues.holdItemType, WorldValues.HoldItemType.nothing);
         effects.CreateElement(WorldValues.axeAvailable, true);
@@ -22,13 +21,14 @@ public class DropAxe : GOAPAction
         //base.AddEffects(state);
         state.SetElementValue(WorldValues.holdItemType, WorldValues.HoldItemType.nothing);
         state.SetElementValue(WorldValues.axeAvailable, true);
-
-        state.CreateElement(WorldValues.isHoldingItem, false);
     }
 
-    public override ActionState PerformAction(GOAPAgent agent, GOAPWorldState worldState)
+    public override ActionState PerformAction(U_GOAPAgent agent, GOAPWorldState worldState)
     {
-        var axeItem = agent.actionObject.GetComponent<HoldableItem>();
+        GameObject agentGameObject = agent.GetAgentObject();
+        AIAgent aiAgent = agentGameObject.GetComponent<AIAgent>();
+
+        var axeItem = aiAgent.actionObject.GetComponent<HoldableItem>();
         axeItem.DetachObject();
 
         worldState.SetElementValue(WorldValues.holdItemObject, null);
@@ -37,13 +37,16 @@ public class DropAxe : GOAPAction
         return ActionState.completed;
     }
 
-    public override bool EnterAction(GOAPAgent agent)
+    public override bool EnterAction(U_GOAPAgent agent)
     {
-        agent.actionObject = agent.GetWorldState().GetElementValue<GameObject>(WorldValues.worldAxe);
+        GameObject agentGameObject = agent.GetAgentObject();
+        AIAgent aiAgent = agentGameObject.GetComponent<AIAgent>();
+
+        aiAgent.actionObject = agent.GetWorldState().GetElementValue<GameObject>(WorldValues.worldAxe);
         return true;
     }
 
-    public override bool IsInRange(GOAPAgent agent)
+    public override bool IsInRange(U_GOAPAgent agent)
     {
         return true;
     }

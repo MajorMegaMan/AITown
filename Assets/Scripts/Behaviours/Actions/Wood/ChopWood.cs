@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChopWood : GOAPAction
+using U_GOAPAgent = GOAPAgent<UnityEngine.GameObject>;
+
+public class ChopWood : GOAPAction<GameObject>
 {
     List<GameObject> instantiatedWoodObjects;
     GameObject woodPrefab;
@@ -29,28 +31,37 @@ public class ChopWood : GOAPAction
         woodCountData.value = value;
     }
 
-    public override ActionState PerformAction(GOAPAgent agent, GOAPWorldState worldState)
+    public override ActionState PerformAction(U_GOAPAgent agent, GOAPWorldState worldState)
     {
+        GameObject agentGameObject = agent.GetAgentObject();
+        AIAgent aiAgent = agentGameObject.GetComponent<AIAgent>();
+
         // Instantiate wood object
         GameObject newWood = GameObject.Instantiate(woodPrefab);
-        newWood.transform.position = agent.transform.position + (Vector3.up * 2.5f);
+        newWood.transform.position = aiAgent.transform.position + (Vector3.up * 2.5f);
         instantiatedWoodObjects.Add(newWood);
         AddEffects(worldState);
         return ActionState.completed;
     }
 
-    public override bool EnterAction(GOAPAgent agent)
+    public override bool EnterAction(U_GOAPAgent agent)
     {
+        GameObject agentGameObject = agent.GetAgentObject();
+        AIAgent aiAgent = agentGameObject.GetComponent<AIAgent>();
+
         // find tree to chop
         // debug values at the moment
-        agent.actionObject = agent.treeTarget.gameObject;
-        agent.m_actionTargetLocation = agent.treeTarget.position;
+        aiAgent.actionObject = aiAgent.treeTarget.gameObject;
+        aiAgent.m_actionTargetLocation = aiAgent.treeTarget.position;
         return true;
     }
 
-    public override bool IsInRange(GOAPAgent agent)
+    public override bool IsInRange(U_GOAPAgent agent)
     {
+        GameObject agentGameObject = agent.GetAgentObject();
+        AIAgent aiAgent = agentGameObject.GetComponent<AIAgent>();
+
         // is tree in range
-        return (agent.transform.position - agent.actionObject.transform.position).magnitude < agent.stoppingDistance;
+        return (aiAgent.transform.position - aiAgent.actionObject.transform.position).magnitude < aiAgent.stoppingDistance;
     }
 }

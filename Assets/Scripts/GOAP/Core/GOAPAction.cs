@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class GOAPAction
+public abstract class GOAPAction<GameObjectRef>
 {
 
     protected GOAPWorldState preconditions;
@@ -73,11 +73,11 @@ public abstract class GOAPAction
 
     public abstract void AddEffects(GOAPWorldState state);
 
-    public abstract ActionState PerformAction(GOAPAgent agent, GOAPWorldState worldState);
+    public abstract ActionState PerformAction(GOAPAgent<GameObjectRef> agent, GOAPWorldState worldState);
 
-    public abstract bool EnterAction(GOAPAgent agent);
+    public abstract bool EnterAction(GOAPAgent<GameObjectRef> agent);
 
-    public abstract bool IsInRange(GOAPAgent agent);
+    public abstract bool IsInRange(GOAPAgent<GameObjectRef> agent);
 
     public bool CanPerformAction(GOAPWorldState worldState)
     {

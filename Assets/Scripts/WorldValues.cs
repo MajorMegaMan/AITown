@@ -19,7 +19,6 @@ public static class WorldValues
 
 
     // Agent Specific values
-    public static string isHoldingItem { get; private set; } = "is_holding_item";// bool
     public static string holdItemType { get; private set; } = "hold_item_type";// HoldItemType
     public static string holdItemObject { get; private set; } = "hold_item_object";// GameObject
     public static string hunger { get; private set; } = "hunger";// float

@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EatFood : GOAPAction
+using U_GOAPAgent = GOAPAgent<UnityEngine.GameObject>;
+
+public class EatFood : GOAPAction<GameObject>
 {
     public EatFood()
     {
         preconditions.CreateElement(WorldValues.holdItemType, WorldValues.HoldItemType.food);
-
-        preconditions.CreateElement(WorldValues.isHoldingItem, true);
-        effects.CreateElement(WorldValues.isHoldingItem, false);
 
         effects.CreateElement(WorldValues.holdItemType, WorldValues.HoldItemType.nothing);
         effects.CreateElement(WorldValues.hunger, 100.0f);
@@ -24,10 +23,9 @@ public class EatFood : GOAPAction
         state.SetElementValue(WorldValues.holdItemType, WorldValues.HoldItemType.nothing);
         state.SetElementValue(WorldValues.hunger, 100.0f);
         state.SetElementValue(WorldValues.hasProcessedHunger, false);
-        state.CreateElement(WorldValues.isHoldingItem, false);
     }
 
-    public override ActionState PerformAction(GOAPAgent agent, GOAPWorldState worldState)
+    public override ActionState PerformAction(U_GOAPAgent agent, GOAPWorldState worldState)
     {
         AddEffects(worldState);
 
@@ -43,12 +41,12 @@ public class EatFood : GOAPAction
         return ActionState.completed;
     }
 
-    public override bool EnterAction(GOAPAgent agent)
+    public override bool EnterAction(U_GOAPAgent agent)
     {
         return true;
     }
 
-    public override bool IsInRange(GOAPAgent agent)
+    public override bool IsInRange(U_GOAPAgent agent)
     {
         return true;
     }

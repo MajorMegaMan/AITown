@@ -1,19 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-//using UnityEngine;
-//using UnityEngine.AI;
 
-public class GOAPAgent
+public class GOAPAgent<GameObjectRef>
 {
+    GameObjectRef agentGameObject;
+
     StateMachine m_stateMachine = new StateMachine();
 
     // GOAP
     GOAPWorldState m_combinedWorldState;
     GOAPWorldState m_agentWorldState = null;
-    Queue<GOAPAction> m_plan = new Queue<GOAPAction>();
-    GOAPBehaviour m_behaviour;
+    Queue<GOAPAction<GameObjectRef>> m_plan = new Queue<GOAPAction<GameObjectRef>>();
+    GOAPBehaviour<GameObjectRef> m_behaviour;
 
-    GOAPAction m_currentAction;
+    GOAPAction<GameObjectRef> m_currentAction;
+
+    public delegate MovementFlag MoveToFunc();
+    MoveToFunc m_moveDelegate = () => { return MovementFlag.PARTIAL; };
+
+    public delegate void Func();
+    Func m_enterNavigation = () => { };
+    Func m_exitNavigation = () => { };
 
     public enum State
     {
@@ -22,8 +29,17 @@ public class GOAPAgent
         PERFORM_ACTION
     }
 
-    private void Init()
+    public enum MovementFlag
     {
+        PARTIAL,
+        COMPLETE,
+        UNABLE
+    }
+
+    public GOAPAgent(GameObjectRef agentGameObject)
+    {
+        this.agentGameObject = agentGameObject;
+
         // initialise states
         m_stateMachine.AddStates(3);
         m_stateMachine.SetStateFunc(0, DecideState);
@@ -33,14 +49,39 @@ public class GOAPAgent
         m_stateMachine.SetState(0);
     }
 
-    // Start is called before the first frame update
+    public void SetEnterNavigationFunc(Func enterNavigation)
+    {
+        m_enterNavigation = enterNavigation;
+    }
+
+    public void SetExitNavigationFunc(Func exitNavigation)
+    {
+        m_exitNavigation = exitNavigation;
+    }
+
+    public void SetMoveToDelegate(MoveToFunc moveDelegate)
+    {
+        m_moveDelegate = moveDelegate;
+    }
+
     public void SetSelfishWorldState()
     {
         m_agentWorldState = m_behaviour.GetSelfishNeeds();
     }
 
+    public GameObjectRef GetAgentObject()
+    {
+        return agentGameObject;
+    }
+
+    // this returns the actual selfishworldstate
+    public GOAPWorldState GetSelfishNeeds()
+    {
+        return m_agentWorldState;
+    }
+
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
         m_behaviour.Update(this, m_agentWorldState);
         m_stateMachine.CallState();
@@ -48,7 +89,7 @@ public class GOAPAgent
 
     public bool SetWorldState(GOAPWorldState worldState)
     {
-        if(m_agentWorldState != null)
+        if (m_agentWorldState != null)
         {
             m_combinedWorldState = GOAPWorldState.CombineWithReferences(worldState, m_agentWorldState);
             return true;
@@ -62,7 +103,7 @@ public class GOAPAgent
         return new GOAPWorldState(m_combinedWorldState);
     }
 
-    public void SetBehaviour(GOAPBehaviour behaviour)
+    public void SetBehaviour(GOAPBehaviour<GameObjectRef> behaviour)
     {
         m_behaviour = behaviour;
         //m_agentWorldState = m_behaviour.GetSelfishNeeds();
@@ -76,49 +117,6 @@ public class GOAPAgent
         m_stateMachine.SetState((int)desiredState);
     }
 
-    void MoveTo()
-    {
-        if(!m_currentAction.CanPerformAction(m_combinedWorldState))
-        {
-            // cannot perform current action, so stop moving to it and find a new plan
-            FindPlan();
-            StopNavigating();
-            return;
-        }
-        else
-        {
-            // StartNavigating
-            m_actionTargetLocation = actionObject.transform.position;
-            SetTargetPosition(m_actionTargetLocation);
-        }
-
-        // if agent is calculating a path need to wait until it has finished
-        if (navAgent.pathPending)
-        {
-            return;
-        }
-
-        // Check distance
-        if (navAgent.remainingDistance < stoppingDistance)
-        {
-            // reached stopping point
-            StopNavigating();
-
-            // Start performing actions here
-            m_stateMachine.SetState(2);
-        }
-    }
-
-    void StopNavigating()
-    {
-
-    }
-
-    void UpdateNavigation()
-    {
-
-    }
-
     public void FindPlan()
     {
         // Get GOAPplan
@@ -129,29 +127,29 @@ public class GOAPAgent
 
     void DecideState()
     {
-        if(m_plan.Count > 0)
+        if (m_plan.Count > 0)
         {
             // plan was found
             m_currentAction = m_plan.Dequeue();
 
             // Check if the action target was assigned correctly
-            if(!m_currentAction.EnterAction(this))
+            if (!m_currentAction.EnterAction(this))
             {
                 // Plan is garbage now find a new one
                 FindPlan();
                 return;
             }
             // if in range of action
-            if(m_currentAction.IsInRange(this))
+            if (m_currentAction.IsInRange(this))
             {
                 // state = perform
-                m_stateMachine.SetState(2);
+                SetState(State.PERFORM_ACTION);
             }
             else
             {
                 // else 
                 // state = moveto
-                SetTargetPosition(m_actionTargetLocation);
+                StartNavigation();
             }
         }
         else
@@ -162,24 +160,79 @@ public class GOAPAgent
         }
     }
 
+    void StartNavigation()
+    {
+        // user defined delegate will "initialise movement variables"
+        m_enterNavigation();
+
+        // then set the state to move
+        SetState(State.MOVE_TO);
+    }
+
+    void ProcessNavigationFlag(MovementFlag flag)
+    {
+        // user defined delegate will "deinitialise movement var" or "close movement var"
+        switch (flag)
+        {
+            case MovementFlag.PARTIAL:
+                {
+                    // agent has not moved but is still able to perform the action
+                    // agent can continue moving
+                    break;
+                }
+            case MovementFlag.COMPLETE:
+                {
+                    // agent has moved and will need to check if in range of action
+                    if (m_currentAction.IsInRange(this))
+                    {
+                        // if action is in range exit movement
+                        m_exitNavigation();
+                        SetState(State.PERFORM_ACTION);
+                    }
+                    break;
+                }
+            case MovementFlag.UNABLE:
+                {
+                    // target action is no longer accessable
+                    m_exitNavigation();
+                    FindPlan();
+                    break;
+                }
+        }
+    }
+
+    void MoveTo()
+    {
+        if (!m_currentAction.CanPerformAction(m_combinedWorldState))
+        {
+            // cannot perform current action, so stop moving to it and find a new plan
+            ProcessNavigationFlag(MovementFlag.UNABLE);
+            return;
+        }
+
+        // User defined Delegate for movement function will go here
+        MovementFlag flag = m_moveDelegate();
+        ProcessNavigationFlag(flag);
+    }
+
     void PerformAction()
     {
         // Check result of performing action
         switch (m_currentAction.PerformAction(this, m_combinedWorldState))
         {
-            case GOAPAction.ActionState.completed:
+            case GOAPAction<GameObjectRef>.ActionState.completed:
                 {
                     // action was completed progress to the next action
                     m_stateMachine.SetState(0);
                     break;
                 }
-            case GOAPAction.ActionState.performing:
+            case GOAPAction<GameObjectRef>.ActionState.performing:
                 {
                     // still performing the action. Nothing needs to be done?
                     // maybe still need to check if in range
                     break;
                 }
-            case GOAPAction.ActionState.interrupt:
+            case GOAPAction<GameObjectRef>.ActionState.interrupt:
                 {
                     // action was interrupted and as a result was not completed therefore a new plan may be needed
                     FindPlan();

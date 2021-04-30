@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PickUpFood : GOAPAction
+using U_GOAPAgent = GOAPAgent<UnityEngine.GameObject>;
+
+public class PickUpFood : GOAPAction<GameObject>
 {
     List<GameObject> instantiatedFoodObjects;
 
@@ -10,9 +12,6 @@ public class PickUpFood : GOAPAction
     {
         preconditions.CreateElement(WorldValues.holdItemType, WorldValues.HoldItemType.nothing);
         preconditions.CreateElement(WorldValues.foodAvailable, true);
-
-        preconditions.CreateElement(WorldValues.isHoldingItem, false);
-        effects.CreateElement(WorldValues.isHoldingItem, true);
 
         effects.CreateElement(WorldValues.holdItemType, WorldValues.HoldItemType.food);
         effects.CreateElement(WorldValues.foodAvailable, false);
@@ -35,20 +34,21 @@ public class PickUpFood : GOAPAction
 
         bool isFoodAvailable = value > 0;
         state.SetElementValue(WorldValues.foodAvailable, isFoodAvailable);
-
-        state.CreateElement(WorldValues.isHoldingItem, true);
     }
 
-    public override ActionState PerformAction(GOAPAgent agent, GOAPWorldState worldState)
+    public override ActionState PerformAction(U_GOAPAgent agent, GOAPWorldState worldState)
     {
         if (worldState.GetElementValue<bool>(WorldValues.foodAvailable))
         {
-            AddEffects(worldState);
-            HoldableItem foodItem = agent.actionObject.GetComponent<HoldableItem>();
-            foodItem.AttachObject(agent.gameObject.transform);
+            GameObject agentGameObject = agent.GetAgentObject();
+            AIAgent aiAgent = agentGameObject.GetComponent<AIAgent>();
 
-            instantiatedFoodObjects.Remove(agent.actionObject);
-            worldState.SetElementValue(WorldValues.holdItemObject, agent.actionObject);
+            AddEffects(worldState);
+            HoldableItem foodItem = aiAgent.actionObject.GetComponent<HoldableItem>();
+            foodItem.AttachObject(aiAgent.gameObject.transform);
+
+            instantiatedFoodObjects.Remove(aiAgent.actionObject);
+            worldState.SetElementValue(WorldValues.holdItemObject, aiAgent.actionObject);
             return ActionState.completed;
         }
         else
@@ -57,15 +57,18 @@ public class PickUpFood : GOAPAction
         }
     }
 
-    public override bool EnterAction(GOAPAgent agent)
+    public override bool EnterAction(U_GOAPAgent agent)
     {
         if (instantiatedFoodObjects.Count == 0)
         {
             return false;
         }
 
+        GameObject agentGameObject = agent.GetAgentObject();
+        AIAgent aiAgent = agentGameObject.GetComponent<AIAgent>();
+
         // find wood to pick up
-        Vector3 agentPosition = agent.gameObject.transform.position;
+        Vector3 agentPosition = aiAgent.transform.position;
 
         GameObject closestFood = instantiatedFoodObjects[0];
         float closestDist = (closestFood.transform.position - agentPosition).magnitude;
@@ -82,14 +85,17 @@ public class PickUpFood : GOAPAction
             }
         }
 
-        agent.actionObject = closestFood;
+        aiAgent.actionObject = closestFood;
 
         // currently just represented by a bool
         return true;
     }
 
-    public override bool IsInRange(GOAPAgent agent)
+    public override bool IsInRange(U_GOAPAgent agent)
     {
-        return (agent.transform.position - agent.actionObject.transform.position).magnitude < agent.stoppingDistance;
+        GameObject agentGameObject = agent.GetAgentObject();
+        AIAgent aiAgent = agentGameObject.GetComponent<AIAgent>();
+
+        return (aiAgent.transform.position - aiAgent.actionObject.transform.position).magnitude < aiAgent.stoppingDistance;
     }
 }
