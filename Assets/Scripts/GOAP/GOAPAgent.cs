@@ -8,8 +8,9 @@ public class GOAPAgent<GameObjectRef>
     StateMachine m_stateMachine = new StateMachine();
 
     // GOAP
+    GOAPWorldState worldState = null;
     GOAPWorldState m_combinedWorldState;
-    GOAPWorldState m_agentWorldState = null;
+    GOAPWorldState m_selfishWorldState = null;
     Queue<GOAPAction<GameObjectRef>> m_plan = new Queue<GOAPAction<GameObjectRef>>();
     GOAPBehaviour<GameObjectRef> m_behaviour;
 
@@ -66,7 +67,7 @@ public class GOAPAgent<GameObjectRef>
 
     public void SetSelfishWorldState()
     {
-        m_agentWorldState = m_behaviour.GetSelfishNeeds();
+        m_selfishWorldState = m_behaviour.GetSelfishNeeds();
     }
 
     public GameObjectRef GetAgentObject()
@@ -77,21 +78,22 @@ public class GOAPAgent<GameObjectRef>
     // this returns the actual selfishworldstate
     public GOAPWorldState GetSelfishNeeds()
     {
-        return m_agentWorldState;
+        return m_selfishWorldState;
     }
 
     // Update is called once per frame
     public void Update()
     {
-        m_behaviour.Update(this, m_agentWorldState);
+        m_behaviour.Update(this, m_selfishWorldState);
         m_stateMachine.CallState();
     }
 
     public bool SetWorldState(GOAPWorldState worldState)
     {
-        if (m_agentWorldState != null)
+        this.worldState = worldState;
+        if (m_selfishWorldState != null)
         {
-            m_combinedWorldState = GOAPWorldState.CombineWithReferences(worldState, m_agentWorldState);
+            m_combinedWorldState = GOAPWorldState.CombineWithReferences(worldState, m_selfishWorldState);
             return true;
         }
         return false;
@@ -110,6 +112,13 @@ public class GOAPAgent<GameObjectRef>
         // new behaviour will most likely not contain the actions remaining in the queue
         // so just simply clear them all and then the agent will find a new plan.
         m_plan.Clear();
+        
+        m_selfishWorldState = m_behaviour.GetSelfishNeeds();
+
+        if (worldState != null)
+        {
+            m_combinedWorldState = GOAPWorldState.CombineWithReferences(worldState, m_selfishWorldState);
+        }
     }
 
     public void SetState(State desiredState)
@@ -203,7 +212,7 @@ public class GOAPAgent<GameObjectRef>
 
     void MoveTo()
     {
-        if (!m_currentAction.CanPerformAction(m_combinedWorldState))
+        if (!m_currentAction.CanPerformAction(this, m_combinedWorldState))
         {
             // cannot perform current action, so stop moving to it and find a new plan
             ProcessNavigationFlag(MovementFlag.UNABLE);

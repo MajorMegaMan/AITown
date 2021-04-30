@@ -39,9 +39,6 @@ public class AIAgent : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_goapAgent.SetSelfishWorldState();
-        selfishNeeds = m_goapAgent.GetSelfishNeeds();
-
         m_goapAgent.SetEnterNavigationFunc(StartNavigating);
         m_goapAgent.SetExitNavigationFunc(StopNavigating);
         m_goapAgent.SetMoveToDelegate(Movefunc);
@@ -72,6 +69,7 @@ public class AIAgent : MonoBehaviour
     public void SetBehaviour(GOAPBehaviour<GameObject> behaviour)
     {
         m_goapAgent.SetBehaviour(behaviour);
+        selfishNeeds = m_goapAgent.GetSelfishNeeds();
     }
 
     void SetTargetPosition(Vector3 targetPosition)
@@ -97,6 +95,11 @@ public class AIAgent : MonoBehaviour
         if (navAgent.pathPending)
         {
             return GOAPAgent<GameObject>.MovementFlag.PARTIAL;
+        }
+        else
+        {
+            // The action object may be moving while the agent is travelling
+            SetTargetPosition(actionObject.transform.position);
         }
 
         return GOAPAgent<GameObject>.MovementFlag.COMPLETE;

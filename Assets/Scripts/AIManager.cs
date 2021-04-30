@@ -29,6 +29,7 @@ public class AIManager : MonoBehaviour
     [ReadOnly] public int storedFood = 0;
     [ReadOnly] public bool axeAvailable = true;
     [ReadOnly] public bool woodAvailable = false;
+    [ReadOnly] public bool foodAvailable = false;
     [ReadOnly] public int worldWoodCount = 0;
     [ReadOnly] public GameObject worldAxe = null;
 
@@ -66,12 +67,6 @@ public class AIManager : MonoBehaviour
         {
             m_allAgents.Add(agent);
         }
-
-        // debugging
-        foreach(var agent in m_allAgents)
-        {
-            agent.SetBehaviour(m_behvaiourList[0]);
-        }
     }
 
     // Start is called before the first frame update
@@ -79,6 +74,7 @@ public class AIManager : MonoBehaviour
     {
         foreach (var agent in m_allAgents)
         {
+            agent.SetBehaviour(m_behvaiourList[0]);
             agent.SetWorldState(m_worldState);
         }
     }
@@ -90,6 +86,7 @@ public class AIManager : MonoBehaviour
         storedFood      = m_worldState.GetElementValue<int>(WorldValues.storedFood);
         axeAvailable    = m_worldState.GetElementValue<bool>(WorldValues.axeAvailable);
         woodAvailable   = m_worldState.GetElementValue<bool>(WorldValues.woodAvailable);
+        foodAvailable   = m_worldState.GetElementValue<bool>(WorldValues.foodAvailable);
         worldWoodCount  = m_worldState.GetElementValue<int>(WorldValues.worldWoodCount);
         worldAxe        = m_worldState.GetElementValue<GameObject>(WorldValues.worldAxe);
     }

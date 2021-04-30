@@ -98,4 +98,19 @@ public class PickUpFood : GOAPAction<GameObject>
 
         return (aiAgent.transform.position - aiAgent.actionObject.transform.position).magnitude < aiAgent.stoppingDistance;
     }
+
+    public override bool CanPerformAction(U_GOAPAgent agent, GOAPWorldState worldState)
+    {
+        bool canPerform = base.CanPerformAction(agent, worldState);
+
+        if(canPerform)
+        {
+            GameObject agentGameObject = agent.GetAgentObject();
+            AIAgent aiAgent = agentGameObject.GetComponent<AIAgent>();
+
+            canPerform = instantiatedFoodObjects.Contains(aiAgent.actionObject);
+        }
+
+        return canPerform;
+    }
 }

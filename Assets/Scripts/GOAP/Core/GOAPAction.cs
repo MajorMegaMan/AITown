@@ -79,7 +79,7 @@ public abstract class GOAPAction<GameObjectRef>
 
     public abstract bool IsInRange(GOAPAgent<GameObjectRef> agent);
 
-    public bool CanPerformAction(GOAPWorldState worldState)
+    public virtual bool CanPerformAction(GOAPAgent<GameObjectRef> agent, GOAPWorldState worldState)
     {
         return worldState.CheckState(preconditions);
     }
