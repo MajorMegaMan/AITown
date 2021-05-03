@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using GOAP;
+
+using U_GOAPAgent = GOAP.GOAPAgent<UnityEngine.GameObject>;
+using U_GOAPBehaviour = GOAP.GOAPBehaviour<UnityEngine.GameObject>;
 
 public class AIAgent : MonoBehaviour
 {
@@ -11,7 +15,7 @@ public class AIAgent : MonoBehaviour
 
     Vector3 m_targetPosition = Vector3.zero;
 
-    GOAPAgent<GameObject> m_goapAgent;
+    U_GOAPAgent m_goapAgent;
 
     GOAPWorldState selfishNeeds;
 
@@ -32,7 +36,7 @@ public class AIAgent : MonoBehaviour
 
     private void Awake()
     {
-        m_goapAgent = new GOAPAgent<GameObject>(gameObject);
+        m_goapAgent = new U_GOAPAgent(gameObject);
         navAgent = GetComponent<NavMeshAgent>();
     }
 
@@ -66,7 +70,7 @@ public class AIAgent : MonoBehaviour
         return m_goapAgent.GetWorldState();
     }
 
-    public void SetBehaviour(GOAPBehaviour<GameObject> behaviour)
+    public void SetBehaviour(U_GOAPBehaviour behaviour)
     {
         m_goapAgent.SetBehaviour(behaviour);
         selfishNeeds = m_goapAgent.GetSelfishNeeds();

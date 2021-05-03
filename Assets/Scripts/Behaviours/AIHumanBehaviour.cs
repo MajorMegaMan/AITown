@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GOAP;
 
-public class AIHumanBehaviour : GOAPBehaviour<GameObject>
+using U_GOAPBehaviour = GOAP.GOAPBehaviour<UnityEngine.GameObject>;
+
+public class AIHumanBehaviour : U_GOAPBehaviour
 {
     float minHunger = 20.0f;
     float hungerSpeed = 5.0f;

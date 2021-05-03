@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GOAP;
 
-using U_GOAPAgent = GOAPAgent<UnityEngine.GameObject>;
+using U_GOAPAgent = GOAP.GOAPAgent<UnityEngine.GameObject>;
 
 public class ChopWood : GOAPAction<GameObject>
 {

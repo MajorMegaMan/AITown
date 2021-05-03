@@ -1,15 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GOAP;
 
-
-using U_GOAPAgent = GOAPAgent<UnityEngine.GameObject>;
-using U_GOAPBehaviour = GOAPBehaviour<UnityEngine.GameObject>;
-
+using U_GOAPBehaviour = GOAP.GOAPBehaviour<UnityEngine.GameObject>;
 
 public class AIManager : MonoBehaviour
 {
-    
     GOAPWorldState m_worldState = new GOAPWorldState();
 
     List<AIAgent> m_allAgents;// = new List<GOAPAgent>();
