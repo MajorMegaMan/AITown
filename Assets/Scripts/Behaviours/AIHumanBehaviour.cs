@@ -10,15 +10,15 @@ public class AIHumanBehaviour : U_GOAPBehaviour
     float minHunger = 20.0f;
     float hungerSpeed = 5.0f;
 
-    public AIHumanBehaviour(List<GameObject> instantiatedWoodObjects, GameObject woodPrefab, List<GameObject> instantiatedFoodObjects, GameObject foodPrefab)
+    public AIHumanBehaviour(GameObject woodPrefab, GameObject foodPrefab)
     {
         // Initialise Action List
-        m_actions.Add(new ChopWood(instantiatedWoodObjects, woodPrefab));
-        m_actions.Add(new PickUpWood(instantiatedWoodObjects));
+        m_actions.Add(new ChopWood(WorldValues.woodObjects, woodPrefab));
+        m_actions.Add(new PickUpWood(WorldValues.woodObjects));
         m_actions.Add(new StoreWood());
 
-        m_actions.Add(new GatherFood(instantiatedFoodObjects, foodPrefab));
-        m_actions.Add(new PickUpFood(instantiatedFoodObjects));
+        m_actions.Add(new GatherFood(WorldValues.foodObjects, foodPrefab));
+        m_actions.Add(new PickUpFood(WorldValues.foodObjects));
         m_actions.Add(new StoreFood());
         m_actions.Add(new EatFood());
 

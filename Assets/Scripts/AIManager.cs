@@ -13,11 +13,8 @@ public class AIManager : MonoBehaviour
 
     List<U_GOAPBehaviour> m_behvaiourList = new List<U_GOAPBehaviour>();
 
-    public List<GameObject> axeObjects;
-    public List<GameObject> woodObjects = new List<GameObject>();
-    public List<GameObject> foodObjects = new List<GameObject>();
-
     [Header("Prefabs")]
+    public GameObject axePrefab;
     public GameObject woodPrefab;
     public GameObject foodPrefab;
 
@@ -32,8 +29,6 @@ public class AIManager : MonoBehaviour
 
     private void Awake()
     {
-        WorldValues.Init();
-
         //for(int i = 0; i < WorldValues.worldValueList.Count; i++)
         //{
         //    m_worldState.CreateElement(WorldValues.worldValueList[i], default);
@@ -54,7 +49,7 @@ public class AIManager : MonoBehaviour
         m_worldState.CreateElement(WorldValues.axeAvailable, true);
         m_worldState.CreateElement(WorldValues.worldAxe, axeObjects[0]); // this class type should be a HoldableItem
 
-        m_behvaiourList.Add(new AIHumanBehaviour(woodObjects, woodPrefab, foodObjects, foodPrefab));
+        m_behvaiourList.Add(new AIHumanBehaviour(woodPrefab, foodPrefab));
 
         var agentArray = FindObjectsOfType<AIAgent>();
 

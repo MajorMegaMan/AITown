@@ -5,7 +5,7 @@ using GOAP;
 
 using U_GOAPAgent = GOAP.GOAPAgent<UnityEngine.GameObject>;
 
-public class PickUpAxe : GOAPAction<GameObject>
+public class PickUpAxe : GOAPAgentAction<GameObject>
 {
     public PickUpAxe()
     {

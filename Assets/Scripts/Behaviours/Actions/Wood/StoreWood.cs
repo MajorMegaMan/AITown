@@ -5,7 +5,7 @@ using GOAP;
 
 using U_GOAPAgent = GOAP.GOAPAgent<UnityEngine.GameObject>;
 
-public class StoreWood : GOAPAction<GameObject>
+public class StoreWood : GOAPAgentAction<GameObject>
 {
     public StoreWood()
     {

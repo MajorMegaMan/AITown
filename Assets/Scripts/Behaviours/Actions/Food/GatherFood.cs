@@ -5,7 +5,7 @@ using GOAP;
 
 using U_GOAPAgent = GOAP.GOAPAgent<UnityEngine.GameObject>;
 
-public class GatherFood : GOAPAction<GameObject>
+public class GatherFood : GOAPAgentAction<GameObject>
 {
     List<GameObject> instantiatedFoodObjects;
     GameObject foodPrefab;

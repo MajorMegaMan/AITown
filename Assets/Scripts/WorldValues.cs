@@ -4,8 +4,9 @@ using UnityEngine;
 
 public static class WorldValues
 {
-    public static List<string> worldValueList { get; private set; } = new List<string>();
-    public static List<string> agentValueList { get; private set; } = new List<string>();
+    public static List<GameObject> axeObjects  = new List<GameObject>();
+    public static List<GameObject> woodObjects = new List<GameObject>();
+    public static List<GameObject> foodObjects = new List<GameObject>();
 
     // World values
     public static string storedWood { get; private set; } = "stored_wood";// int
@@ -32,11 +33,22 @@ public static class WorldValues
         axe
     }
 
-    public static void Init()
+    public static GameObject CreateItem(GameObject itemPrefab, GameObject entity)
     {
-        worldValueList.Add(storedWood);
-        worldValueList.Add(storedFood);
-        worldValueList.Add(worldAxe);
-        worldValueList.Add(axeAvailable);
+        return CreateItem(itemPrefab, entity.transform.position + (Vector3.up * 2.5f));
+    }
+
+    public static GameObject CreateItem(GameObject itemPrefab, Vector3 location)
+    {
+        GameObject newItem = GameObject.Instantiate(itemPrefab);
+        newItem.transform.position = location;
+        return newItem;
+    }
+
+    public static GameObject Createfood(GameObject foodPrefab, GameObject entity)
+    {
+        GameObject newFood = CreateItem(foodPrefab, entity);
+        foodObjects.Add(newFood);
+        return newFood;
     }
 }

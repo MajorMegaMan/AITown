@@ -5,7 +5,7 @@ using GOAP;
 
 using U_GOAPAgent = GOAP.GOAPAgent<UnityEngine.GameObject>;
 
-public class PickUpWood : GOAPAction<GameObject>
+public class PickUpWood : GOAPAgentAction<GameObject>
 {
     List<GameObject> instantiatedWoodObjects;
 

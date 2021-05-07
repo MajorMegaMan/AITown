@@ -5,7 +5,7 @@ using GOAP;
 
 using U_GOAPAgent = GOAP.GOAPAgent<UnityEngine.GameObject>;
 
-public class EatFood : GOAPAction<GameObject>
+public class EatFood : GOAPAgentAction<GameObject>
 {
     public EatFood()
     {
