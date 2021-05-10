@@ -58,7 +58,7 @@ public class TestManager : MonoBehaviour
         m_worldState.CreateElement(WorldValues.axeAvailable, true);
         m_worldState.CreateElement(WorldValues.worldAxe, axeObjects[0]); // this class type should be a HoldableItem
 
-        m_behvaiourList.Add(new AIHumanBehaviour(woodObjects, woodPrefab, foodObjects, foodPrefab));
+        m_behvaiourList.Add(new AIHumanBehaviour(woodPrefab, foodPrefab));
 
         var agentArray = FindObjectsOfType<TestAgent>();
 

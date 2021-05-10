@@ -1185,10 +1185,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a51bb264ab98984d8ebdf7bfdcca6ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  axeObjects:
-  - {fileID: 2095590872}
-  woodObjects: []
-  foodObjects: []
+  debugAxe: {fileID: 2095590872}
+  axePrefab: {fileID: 1052812562863295953, guid: 6e36789ecb2e2b24f9df25f6cff07ccf, type: 3}
   woodPrefab: {fileID: 8470114079898124337, guid: d085276a1759c624e81371f02513c025, type: 3}
   foodPrefab: {fileID: 815330825130794376, guid: 5f917d1c072ee4243ba2d391f176e4c7, type: 3}
   storedWood: 0

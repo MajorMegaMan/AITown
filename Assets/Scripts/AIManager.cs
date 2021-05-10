@@ -13,6 +13,8 @@ public class AIManager : MonoBehaviour
 
     List<U_GOAPBehaviour> m_behvaiourList = new List<U_GOAPBehaviour>();
 
+    public GameObject debugAxe;
+
     [Header("Prefabs")]
     public GameObject axePrefab;
     public GameObject woodPrefab;
@@ -47,7 +49,7 @@ public class AIManager : MonoBehaviour
 
         // axe values
         m_worldState.CreateElement(WorldValues.axeAvailable, true);
-        m_worldState.CreateElement(WorldValues.worldAxe, axeObjects[0]); // this class type should be a HoldableItem
+        m_worldState.CreateElement(WorldValues.worldAxe, debugAxe); // this class type should be a HoldableItem
 
         m_behvaiourList.Add(new AIHumanBehaviour(woodPrefab, foodPrefab));
 
