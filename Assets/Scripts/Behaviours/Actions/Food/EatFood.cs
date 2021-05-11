@@ -5,7 +5,7 @@ using GOAP;
 
 using U_GOAPAgent = GOAP.GOAPAgent<UnityEngine.GameObject>;
 
-public class EatFood : GOAPAgentAction<GameObject>
+public class EatFood : AIAgentAction
 {
     public EatFood()
     {
@@ -16,6 +16,8 @@ public class EatFood : GOAPAgentAction<GameObject>
         effects.CreateElement(WorldValues.hasProcessedHunger, false);
 
         name = "Eat Food";
+
+        animTrigger = name;
     }
 
     public override void AddEffects(GOAPWorldState state)
@@ -29,6 +31,13 @@ public class EatFood : GOAPAgentAction<GameObject>
     public override ActionState PerformAction(U_GOAPAgent agent, GOAPWorldState worldState)
     {
         AddEffects(worldState);
+
+        AIAgent aiAgent = agent.GetAgentObject().GetComponent<AIAgent>();
+
+        if(aiAgent.waitingForAction)
+        {
+            return ActionState.performing;
+        }
 
         // Get held wood object and destroy it
         var data = worldState.GetData(WorldValues.holdItemObject);

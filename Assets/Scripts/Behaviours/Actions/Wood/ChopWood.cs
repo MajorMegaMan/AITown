@@ -5,7 +5,7 @@ using GOAP;
 
 using U_GOAPAgent = GOAP.GOAPAgent<UnityEngine.GameObject>;
 
-public class ChopWood : GOAPAgentAction<GameObject>
+public class ChopWood : AIAgentAction
 {
     List<GameObject> instantiatedWoodObjects;
     GameObject woodPrefab;
@@ -17,6 +17,7 @@ public class ChopWood : GOAPAgentAction<GameObject>
         effects.CreateElement(WorldValues.worldWoodCount, +1);
 
         name = "Chop Wood";
+        animTrigger = name;
 
         this.instantiatedWoodObjects = instantiatedWoodObjects;
         this.woodPrefab = woodPrefab;
@@ -37,12 +38,20 @@ public class ChopWood : GOAPAgentAction<GameObject>
         GameObject agentGameObject = agent.GetAgentObject();
         AIAgent aiAgent = agentGameObject.GetComponent<AIAgent>();
 
-        // Instantiate wood object
-        GameObject newWood = GameObject.Instantiate(woodPrefab);
-        newWood.transform.position = aiAgent.transform.position + (Vector3.up * 2.5f);
-        instantiatedWoodObjects.Add(newWood);
-        AddEffects(worldState);
-        return ActionState.completed;
+        if(aiAgent.actionTimer > 5.0f)
+        {
+            // Instantiate wood object
+            GameObject newWood = GameObject.Instantiate(woodPrefab);
+            newWood.transform.position = aiAgent.transform.position + (Vector3.up * 2.5f);
+            instantiatedWoodObjects.Add(newWood);
+            AddEffects(worldState);
+            return ActionState.completed;
+        }
+        else
+        {
+            aiAgent.actionTimer += Time.deltaTime;
+            return ActionState.performing;
+        }
     }
 
     public override bool EnterAction(U_GOAPAgent agent)

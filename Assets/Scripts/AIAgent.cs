@@ -19,9 +19,13 @@ public class AIAgent : MonoBehaviour
 
     GOAPWorldState selfishNeeds;
 
+    public Animator anim;
+
     // Action var
     public Vector3 m_actionTargetLocation = Vector3.zero;
     public GameObject actionObject = null;
+    public float actionTimer = 0.0f;
+    public bool waitingForAction = true;
 
     //Debugging
     [Header("Debugging")]
@@ -46,6 +50,9 @@ public class AIAgent : MonoBehaviour
         m_goapAgent.SetEnterNavigationFunc(StartNavigating);
         m_goapAgent.SetExitNavigationFunc(StopNavigating);
         m_goapAgent.SetMoveToDelegate(Movefunc);
+
+        m_goapAgent.SetStartPerformingFunc(StartPerforming);
+        m_goapAgent.SetExitPerformingFunc(ExitPerforming);
     }
 
     // Update is called once per frame
@@ -86,11 +93,26 @@ public class AIAgent : MonoBehaviour
     {
         navAgent.isStopped = false;
         SetTargetPosition(m_actionTargetLocation);
+        anim.SetTrigger("walk");
     }
 
-    void StopNavigating()
+    public void StopNavigating()
     {
         navAgent.isStopped = true;
+        anim.SetTrigger("idle");
+    }
+
+    void StartPerforming()
+    {
+        AIAgentAction action = (AIAgentAction)m_goapAgent.GetAction();
+        anim.SetTrigger(action.GetAnimTrigger());
+        actionTimer = 0.0f;
+        waitingForAction = true;
+    }
+
+    void ExitPerforming()
+    {
+        anim.SetTrigger("idle");
     }
 
     GOAPAgent<GameObject>.MovementFlag Movefunc()

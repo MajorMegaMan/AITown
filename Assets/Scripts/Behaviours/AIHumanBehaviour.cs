@@ -84,6 +84,7 @@ public class AIHumanBehaviour : U_GOAPBehaviour
         {
             // This guy is hungry
             agentSelfishNeeds.SetElementValue(WorldValues.hasProcessedHunger, true);
+            agent.GetAgentObject().GetComponent<AIAgent>().StopNavigating();
             agent.FindPlan();
         }
     }
