@@ -100,4 +100,19 @@ public class PickUpWood : AIAgentAction
         return (aiAgent.transform.position - aiAgent.actionObject.transform.position).magnitude < aiAgent.stoppingDistance;
         //return true;
     }
+
+    public override bool CanPerformAction(U_GOAPAgent agent, GOAPWorldState worldState)
+    {
+        bool canPerform = base.CanPerformAction(agent, worldState);
+
+        if (canPerform)
+        {
+            GameObject agentGameObject = agent.GetAgentObject();
+            AIAgent aiAgent = agentGameObject.GetComponent<AIAgent>();
+
+            canPerform = instantiatedWoodObjects.Contains(aiAgent.actionObject);
+        }
+
+        return canPerform;
+    }
 }

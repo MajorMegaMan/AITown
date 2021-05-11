@@ -10,20 +10,13 @@ public class AIHumanBehaviour : U_GOAPBehaviour
     float minHunger = 20.0f;
     float hungerSpeed = 5.0f;
 
-    public AIHumanBehaviour(GameObject woodPrefab, GameObject foodPrefab)
+    public AIHumanBehaviour()
     {
         // Initialise Action List
-        m_actions.Add(new ChopWood(WorldValues.woodObjects, woodPrefab));
-        m_actions.Add(new PickUpWood(WorldValues.woodObjects));
-        m_actions.Add(new StoreWood());
-
-        m_actions.Add(new GatherFood(WorldValues.foodObjects, foodPrefab));
-        m_actions.Add(new PickUpFood(WorldValues.foodObjects));
-        m_actions.Add(new StoreFood());
-        m_actions.Add(new EatFood());
-
-        m_actions.Add(new PickUpAxe());
-        m_actions.Add(new DropAxe());
+        foreach(var act in ActionList.humanActions)
+        {
+            m_actions.Add(act);
+        }
 
         // Initialise WorldStateNeeds
         m_selfishNeeds.CreateElement(WorldValues.holdItemType, WorldValues.HoldItemType.nothing);
@@ -45,7 +38,7 @@ public class AIHumanBehaviour : U_GOAPBehaviour
             targetGoal.CreateElement(WorldValues.hunger, 100.0f);
         }
 
-        else if(agentWorldState.GetElementValue<bool>(WorldValues.axeAvailable))
+        else if(agentWorldState.GetElementValue<bool>(WorldValues.axeAvailable) || agentWorldState.GetElementValue<bool>(WorldValues.woodAvailable))
         {
             // Get wood for storage
             int woodVal = agentWorldState.GetElementValue<int>(WorldValues.storedWood);

@@ -51,7 +51,10 @@ public class AIManager : MonoBehaviour
         m_worldState.CreateElement(WorldValues.axeAvailable, true);
         m_worldState.CreateElement(WorldValues.worldAxe, debugAxe); // this class type should be a HoldableItem
 
-        m_behvaiourList.Add(new AIHumanBehaviour(woodPrefab, foodPrefab));
+        ActionList.Init(woodPrefab, foodPrefab);
+
+        m_behvaiourList.Add(new AIHumanBehaviour());
+        m_behvaiourList.Add(new WoodCutterBehaviour());
 
         var agentArray = FindObjectsOfType<AIAgent>();
 
@@ -66,10 +69,13 @@ public class AIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        foreach (var agent in m_allAgents)
+        m_allAgents[0].SetBehaviour(m_behvaiourList[1]);
+        m_allAgents[0].SetWorldState(m_worldState);
+
+        for (int i = 1; i < m_allAgents.Count; i++)
         {
-            agent.SetBehaviour(m_behvaiourList[0]);
-            agent.SetWorldState(m_worldState);
+            m_allAgents[i].SetBehaviour(m_behvaiourList[0]);
+            m_allAgents[i].SetWorldState(m_worldState);
         }
     }
 
