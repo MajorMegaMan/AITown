@@ -6,10 +6,12 @@ using GOAP;
 public static class BehaviourComponenets
 {
     public static BehaviourInitialiser hungerComponent;
+    public static BehaviourInitialiser woodCutterComponent;
 
     public static void Init()
     {
-
+        InitHungerComponent();
+        InitWoodCutter();
     }
 
     static void InitHungerComponent()
@@ -32,6 +34,24 @@ public static class BehaviourComponenets
 
         hungerComponent.updater = new HungerUpdate();
     }
+
+    static void InitWoodCutter()
+    {
+        woodCutterComponent = new BehaviourInitialiser();
+
+        foreach(var act in ActionList.humanWoodActions)
+        {
+            hungerComponent.actionList.Add(act);
+        }
+
+        woodCutterComponent.requiredWorldStates = new GOAPWorldState();
+
+        var worldState = woodCutterComponent.requiredWorldStates;
+        worldState.CreateElement(WorldValues.holdItemType, WorldValues.HoldItemType.nothing);
+        worldState.CreateElement(WorldValues.holdItemObject, null);
+
+        woodCutterComponent.updater = new WoodCutterUpdater();
+    }
 }
 
 public class BehaviourInitialiser
@@ -43,7 +63,7 @@ public class BehaviourInitialiser
 
 public abstract class BehaviourUpdater
 {
-    public abstract GOAPWorldState FindGoal(GOAPWorldState agentWorldState);
+    public abstract GOAPWorldState FindGoal(GOAPWorldState agentWorldState, ref GOAPWorldState targetGoal);
     public abstract void Update(GOAPAgent<GameObject> agent, GOAPWorldState agentSelfishNeeds);
 }
 
@@ -52,15 +72,16 @@ public class HungerUpdate : BehaviourUpdater
     float minHunger = 20.0f;
     float hungerSpeed = 5.0f;
 
-    public override GOAPWorldState FindGoal(GOAPWorldState agentWorldState)
+    public override GOAPWorldState FindGoal(GOAPWorldState agentWorldState, ref GOAPWorldState targetGoal)
     {
-        GOAPWorldState targetGoal = null;
-
         if (agentWorldState.GetElementValue<float>(WorldValues.hunger) < minHunger)
         {
             // This guy is hungry
             // Get food to eat
-            targetGoal = new GOAPWorldState();
+            if(targetGoal != null)
+            {
+                targetGoal = new GOAPWorldState();
+            }
             targetGoal.CreateElement(WorldValues.hunger, 100.0f);
         }
 
@@ -85,5 +106,33 @@ public class HungerUpdate : BehaviourUpdater
             agent.GetAgentObject().GetComponent<AIAgent>().StopNavigating();
             agent.FindPlan();
         }
+    }
+}
+
+public class WoodCutterUpdater : BehaviourUpdater
+{
+    public override GOAPWorldState FindGoal(GOAPWorldState agentWorldState, ref GOAPWorldState targetGoal)
+    {
+        if (targetGoal != null)
+        {
+            targetGoal = new GOAPWorldState();
+        }
+
+        if (agentWorldState.GetElementValue<bool>(WorldValues.axeAvailable) || agentWorldState.GetElementValue<bool>(WorldValues.woodAvailable))
+        {
+            // Get wood for storage
+            int woodVal = agentWorldState.GetElementValue<int>(WorldValues.storedWood);
+            woodVal++;
+
+            targetGoal.CreateElement(WorldValues.storedWood, woodVal);
+        }
+
+        //return goal;
+        return targetGoal;
+    }
+
+    public override void Update(GOAPAgent<GameObject> agent, GOAPWorldState agentSelfishNeeds)
+    {
+
     }
 }

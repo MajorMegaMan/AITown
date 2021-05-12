@@ -7,43 +7,49 @@ using U_GOAPBehaviour = GOAP.GOAPBehaviour<UnityEngine.GameObject>;
 
 public class WoodCutterBehaviour : U_GOAPBehaviour
 {
+    List<BehaviourUpdater> behaviourUpdaters = new List<BehaviourUpdater>();
+
+    delegate GOAPWorldState FindGoalDelegate(GOAPWorldState agentWorldState, ref GOAPWorldState targetGoal);
+    FindGoalDelegate findGoalDelegate;
+
+    delegate void UpdateDelegate(GOAPAgent<GameObject> agent, GOAPWorldState agentSelfishNeeds);
+    UpdateDelegate updateDelegate;
+
     public WoodCutterBehaviour()
     {
         // Initialise Action List
-        foreach (var act in ActionList.humanActions)
+        AddBehaviourComponent(BehaviourComponenets.hungerComponent);
+        AddBehaviourComponent(BehaviourComponenets.woodCutterComponent);
+    }
+
+    void AddBehaviourComponent(BehaviourInitialiser behaviourComponent)
+    {
+        foreach(var act in behaviourComponent.actionList)
         {
             m_actions.Add(act);
         }
 
-        // Initialise WorldStateNeeds
-        m_selfishNeeds.CreateElement(WorldValues.holdItemType, WorldValues.HoldItemType.nothing);
-        m_selfishNeeds.CreateElement(WorldValues.holdItemObject, null);
+        GOAPWorldState worldstate = behaviourComponent.requiredWorldStates;
+        foreach (string name in worldstate.GetNames())
+        {
+            var data = worldstate.GetData(name);
 
-        m_selfishNeeds.CreateElement(WorldValues.hunger, 100.0f);
-        m_selfishNeeds.CreateElement(WorldValues.hasProcessedHunger, false);
+            m_selfishNeeds.CreateElement(name, data.value);
+        }
 
+        BehaviourUpdater bUpdater = behaviourComponent.updater;
+        if(bUpdater != null)
+        {
+            findGoalDelegate += bUpdater.FindGoal;
+            updateDelegate += bUpdater.Update;
+        }
     }
 
     public override GOAPWorldState FindGoal(GOAPWorldState agentWorldState)
     {
-        GOAPWorldState targetGoal = new GOAPWorldState();
+        GOAPWorldState targetGoal = null;
 
-        bool holdingAxe = agentWorldState.GetElementValue<WorldValues.HoldItemType>(WorldValues.holdItemType) == WorldValues.HoldItemType.axe;
-
-        if (holdingAxe || agentWorldState.GetElementValue<bool>(WorldValues.axeAvailable))
-        {
-            // Get wood for storage
-            int woodVal = agentWorldState.GetElementValue<int>(WorldValues.worldWoodCount);
-            woodVal++;
-
-            targetGoal.CreateElement(WorldValues.worldWoodCount, woodVal);
-        }
-
-        else
-        {
-            // dick around for now
-            return null;
-        }
+        findGoalDelegate(agentWorldState, ref targetGoal);
 
         //return goal;
         return targetGoal;
@@ -51,6 +57,6 @@ public class WoodCutterBehaviour : U_GOAPBehaviour
 
     public override void Update(GOAPAgent<GameObject> agent, GOAPWorldState agentSelfishNeeds)
     {
-
+        updateDelegate(agent, agentSelfishNeeds);
     }
 }
