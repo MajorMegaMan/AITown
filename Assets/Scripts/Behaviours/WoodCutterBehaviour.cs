@@ -7,9 +7,7 @@ using U_GOAPBehaviour = GOAP.GOAPBehaviour<UnityEngine.GameObject>;
 
 public class WoodCutterBehaviour : U_GOAPBehaviour
 {
-    List<BehaviourUpdater> behaviourUpdaters = new List<BehaviourUpdater>();
-
-    delegate GOAPWorldState FindGoalDelegate(GOAPWorldState agentWorldState, ref GOAPWorldState targetGoal);
+    delegate void FindGoalDelegate(GOAPWorldState agentWorldState, ref GOAPWorldState targetGoal);
     FindGoalDelegate findGoalDelegate;
 
     delegate void UpdateDelegate(GOAPAgent<GameObject> agent, GOAPWorldState agentSelfishNeeds);
@@ -26,7 +24,10 @@ public class WoodCutterBehaviour : U_GOAPBehaviour
     {
         foreach(var act in behaviourComponent.actionList)
         {
-            m_actions.Add(act);
+            if(!m_actions.Contains(act))
+            {
+                m_actions.Add(act);
+            }
         }
 
         GOAPWorldState worldstate = behaviourComponent.requiredWorldStates;
