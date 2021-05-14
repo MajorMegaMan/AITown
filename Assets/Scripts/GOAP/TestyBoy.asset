@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a873f83e254befd4789a22b0999fd7eb, type: 3}
   m_Name: TestyBoy
   m_EditorClassIdentifier: 
-  script: {fileID: 11500000, guid: 785cab8837eb17548b38a92a8a89da8e, type: 3}
+  script: {fileID: 0}
+  actions: []
+  behaviourUpdater: {fileID: 0}
