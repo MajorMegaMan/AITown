@@ -7,6 +7,8 @@ using U_GOAPAgentAction = GOAP.GOAPAgentAction<UnityEngine.GameObject>;
 
 public static class ActionList
 {
+    public static bool isInitialised = false;
+
     public static List<U_GOAPAgentAction> humanActions;
     public static List<U_GOAPAgentAction> humanWoodActions;
     public static List<U_GOAPAgentAction> humanFoodActions;
@@ -40,6 +42,7 @@ public static class ActionList
         dropAxe       = new DropAxe();
 
         InitHumanList();
+        isInitialised = true;
     }
 
     static void InitHumanList()
@@ -70,6 +73,30 @@ public static class ActionList
         foreach (var act in humanFoodActions)
         {
             humanActions.Add(act);
+        }
+    }
+
+    public static void EditorClear()
+    {
+        if(!Application.isPlaying)
+        {
+            chopWood    = null;
+            pickUpWood  = null;
+            storeWood   = null;
+
+            gatherFood  = null;
+            pickUpFood  = null;
+            storeFood   = null;
+            eatFood     = null;
+
+            pickUpAxe   = null;
+            dropAxe     = null;
+
+            humanActions = null;
+            humanFoodActions = null;
+            humanWoodActions = null;
+
+            isInitialised = false;
         }
     }
 }

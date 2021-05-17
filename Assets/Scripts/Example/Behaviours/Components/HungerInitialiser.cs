@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using GOAP;
 
-public class HungerInitialiser : BehaviourInitialiser
+using U_GOAPAgentAction = GOAP.GOAPAgentAction<UnityEngine.GameObject>;
+
+public class HungerInitialiser : BehaviourComponentInitialiser
 {
     public HungerInitialiser()
     {

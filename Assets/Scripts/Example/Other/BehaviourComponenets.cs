@@ -5,8 +5,8 @@ using GOAP;
 
 public static class BehaviourComponenets
 {
-    public static BehaviourInitialiser hungerComponent;
-    public static BehaviourInitialiser woodCutterComponent;
+    public static BehaviourComponentInitialiser hungerComponent;
+    public static BehaviourComponentInitialiser woodCutterComponent;
 
     public static void Init()
     {
@@ -16,7 +16,7 @@ public static class BehaviourComponenets
 
     static void InitHungerComponent()
     {
-        hungerComponent = new BehaviourInitialiser();
+        hungerComponent = new BehaviourComponentInitialiser();
 
         foreach(var act in ActionList.humanFoodActions)
         {
@@ -37,7 +37,7 @@ public static class BehaviourComponenets
 
     static void InitWoodCutter()
     {
-        woodCutterComponent = new BehaviourInitialiser();
+        woodCutterComponent = new BehaviourComponentInitialiser();
 
         foreach(var act in ActionList.humanWoodActions)
         {

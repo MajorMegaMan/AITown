@@ -20,7 +20,7 @@ public class WoodCutterBehaviour : U_GOAPBehaviour
         AddBehaviourComponent(BehaviourComponenets.woodCutterComponent);
     }
 
-    void AddBehaviourComponent(BehaviourInitialiser behaviourComponent)
+    void AddBehaviourComponent(BehaviourComponentInitialiser behaviourComponent)
     {
         foreach(var act in behaviourComponent.actionList)
         {

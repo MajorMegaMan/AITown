@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using GOAP;
 
-public class BehaviourInitialiser
+public class BehaviourComponentInitialiser
 {
     public List<GOAPAgentAction<GameObject>> actionList = new List<GOAPAgentAction<GameObject>>();
     public GOAPWorldState requiredWorldStates = null;
+    public bool hasFindGoal = false;
+    public bool hasUpdate = false;
     public BehaviourUpdater updater = null;
 }
