@@ -29,8 +29,6 @@ public class StoreWood : AIAgentAction
 
     public override ActionState PerformAction(U_GOAPAgent agent, GOAPWorldState worldState)
     {
-        AddEffects(worldState);
-        
         // Get held wood object and destroy it
         var data = worldState.GetData(WorldValues.holdItemObject);
         GameObject woodObject = (GameObject)(data.value);

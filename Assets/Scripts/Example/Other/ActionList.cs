@@ -7,72 +7,216 @@ using U_GOAPAgentAction = GOAP.GOAPAgentAction<UnityEngine.GameObject>;
 
 public static class ActionList
 {
-    public static bool isInitialised = false;
+    static List<U_GOAPAgentAction> m_humanActions;
+    public static List<U_GOAPAgentAction> humanActions
+    {
+        get 
+        {
+            InitHumanList();
+            return m_humanActions;
+        }
+    }
 
-    public static List<U_GOAPAgentAction> humanActions;
-    public static List<U_GOAPAgentAction> humanWoodActions;
-    public static List<U_GOAPAgentAction> humanFoodActions;
+    static List<U_GOAPAgentAction> m_humanWoodActions;
+    public static List<U_GOAPAgentAction> humanWoodActions
+    {
+        get
+        {
+            InitHumanWoodList();
+            return m_humanWoodActions;
+        }
+    }
 
-    public static U_GOAPAgentAction chopWood;
-    public static U_GOAPAgentAction pickUpWood;
-    public static U_GOAPAgentAction storeWood;
+    static List<U_GOAPAgentAction> m_humanFoodActions;
+    public static List<U_GOAPAgentAction> humanFoodActions
+    {
+        get
+        {
+            InitHumanFoodList();
+            return m_humanFoodActions;
+        }
+    }
 
+    static U_GOAPAgentAction m_chopWood;
+    public static U_GOAPAgentAction chopWood
+    {
+        get
+        {
+            if (m_chopWood == null)
+            {
+                m_chopWood = new ChopWood();
+            }
+            return m_chopWood;
+        }
+    }
 
-    public static U_GOAPAgentAction gatherFood;
-    public static U_GOAPAgentAction pickUpFood;
-    public static U_GOAPAgentAction storeFood;
-    public static U_GOAPAgentAction eatFood;
+    static U_GOAPAgentAction m_pickUpWood;
+    public static U_GOAPAgentAction pickUpWood
+    {
+        get
+        {
+            if (m_pickUpWood == null)
+            {
+                m_pickUpWood = new PickUpWood();
+            }
+            return m_pickUpWood;
+        }
+    }
 
+    static U_GOAPAgentAction m_storeWood;
+    public static U_GOAPAgentAction storeWood
+    {
+        get
+        {
+            if (m_storeWood == null)
+            {
+                m_storeWood = new StoreWood();
+            }
+            return m_storeWood;
+        }
+    }
 
-    public static U_GOAPAgentAction pickUpAxe;
-    public static U_GOAPAgentAction dropAxe;
+    static U_GOAPAgentAction m_gatherFood;
+    public static U_GOAPAgentAction gatherFood
+    {
+        get
+        {
+            if (m_gatherFood == null)
+            {
+                m_gatherFood = new GatherFood();
+            }
+            return m_gatherFood;
+        }
+    }
+
+    static U_GOAPAgentAction m_pickUpFood;
+    public static U_GOAPAgentAction pickUpFood
+    {
+        get
+        {
+            if (m_pickUpFood == null)
+            {
+                m_pickUpFood = new PickUpFood();
+            }
+            return m_pickUpFood;
+        }
+    }
+
+    static U_GOAPAgentAction m_storeFood;
+    public static U_GOAPAgentAction storeFood
+    {
+        get
+        {
+            if (m_storeFood == null)
+            {
+                m_storeFood = new StoreFood();
+            }
+            return m_storeFood;
+        }
+    }
+
+    static U_GOAPAgentAction m_eatFood;
+    public static U_GOAPAgentAction eatFood
+    {
+        get
+        {
+            if (m_eatFood == null)
+            {
+                m_eatFood = new EatFood();
+            }
+            return m_eatFood;
+        }
+    }
+
+    static U_GOAPAgentAction m_pickUpAxe;
+    public static U_GOAPAgentAction pickUpAxe
+    {
+        get
+        {
+            if (m_pickUpAxe == null)
+            {
+                m_pickUpAxe = new PickUpAxe();
+            }
+            return m_pickUpAxe;
+        }
+    }
+
+    static U_GOAPAgentAction m_dropAxe;
+    public static U_GOAPAgentAction dropAxe
+    {
+        get
+        {
+            if (m_dropAxe == null)
+            {
+                m_dropAxe = new DropAxe();
+            }
+            return m_dropAxe;
+        }
+    }
+
 
     public static void Init(GameObject woodPrefab, GameObject foodPrefab)
     {
-        chopWood      = new ChopWood(WorldValues.woodObjects, woodPrefab);
-        pickUpWood    = new PickUpWood(WorldValues.woodObjects);
-        storeWood     = new StoreWood();
+        ChopWood.SetWoodPrefab(woodPrefab);
+        ChopWood.SetWoodObjectsList(WorldValues.woodObjects);
 
-        gatherFood    = new GatherFood(WorldValues.foodObjects, foodPrefab);
-        pickUpFood    = new PickUpFood(WorldValues.foodObjects);
-        storeFood     = new StoreFood();
-        eatFood       = new EatFood();
+        PickUpWood.SetWoodObjectsList(WorldValues.woodObjects);
 
-        pickUpAxe     = new PickUpAxe();
-        dropAxe       = new DropAxe();
+        GatherFood.SetFoodPrefab(foodPrefab);
+        GatherFood.SetFoodObjectsList(WorldValues.foodObjects);
 
-        InitHumanList();
-        isInitialised = true;
+        PickUpFood.SetFoodObjectsList(WorldValues.foodObjects);
     }
 
     static void InitHumanList()
     {
-        humanWoodActions = new List<U_GOAPAgentAction>();
-
-        humanWoodActions.Add(chopWood);
-        humanWoodActions.Add(pickUpWood);
-        humanWoodActions.Add(storeWood);
-
-        humanWoodActions.Add(pickUpAxe);
-        humanWoodActions.Add(dropAxe);
-
-        humanFoodActions = new List<U_GOAPAgentAction>();
-
-        humanFoodActions.Add(gatherFood);
-        humanFoodActions.Add(pickUpFood);
-        humanFoodActions.Add(storeFood);
-        humanFoodActions.Add(eatFood);
-
-        humanActions = new List<U_GOAPAgentAction>();
-
-        foreach(var act in humanWoodActions)
+        if(m_humanActions == null)
         {
-            humanActions.Add(act);
+            m_humanActions = new List<U_GOAPAgentAction>();
+
+            foreach (var act in humanWoodActions)
+            {
+                if(!m_humanActions.Contains(act))
+                {
+                    m_humanActions.Add(act);
+                }
+            }
+
+            foreach (var act in humanFoodActions)
+            {
+                if (!m_humanActions.Contains(act))
+                {
+                    m_humanActions.Add(act);
+                }
+            }
         }
+    }
 
-        foreach (var act in humanFoodActions)
+    static void InitHumanWoodList()
+    {
+        if (m_humanWoodActions == null)
         {
-            humanActions.Add(act);
+            m_humanWoodActions = new List<U_GOAPAgentAction>();
+
+            m_humanWoodActions.Add(chopWood);
+            m_humanWoodActions.Add(pickUpWood);
+            m_humanWoodActions.Add(storeWood);
+
+            m_humanWoodActions.Add(pickUpAxe);
+            m_humanWoodActions.Add(dropAxe);
+        }
+    }
+
+    static void InitHumanFoodList()
+    {
+        if (m_humanFoodActions == null)
+        {
+            m_humanFoodActions = new List<U_GOAPAgentAction>();
+
+            m_humanFoodActions.Add(gatherFood);
+            m_humanFoodActions.Add(pickUpFood);
+            m_humanFoodActions.Add(storeFood);
+            m_humanFoodActions.Add(eatFood);
         }
     }
 
@@ -80,23 +224,21 @@ public static class ActionList
     {
         if(!Application.isPlaying)
         {
-            chopWood    = null;
-            pickUpWood  = null;
-            storeWood   = null;
+            m_chopWood    = null;
+            m_pickUpWood  = null;
+            m_storeWood   = null;
 
-            gatherFood  = null;
-            pickUpFood  = null;
-            storeFood   = null;
-            eatFood     = null;
+            m_gatherFood  = null;
+            m_pickUpFood  = null;
+            m_storeFood   = null;
+            m_eatFood     = null;
 
-            pickUpAxe   = null;
-            dropAxe     = null;
+            m_pickUpAxe   = null;
+            m_dropAxe     = null;
 
-            humanActions = null;
-            humanFoodActions = null;
-            humanWoodActions = null;
-
-            isInitialised = false;
+            m_humanActions = null;
+            m_humanFoodActions = null;
+            m_humanWoodActions = null;
         }
     }
 }

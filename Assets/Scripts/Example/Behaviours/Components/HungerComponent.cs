@@ -3,12 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using GOAP;
 
-public class HungerUpdate : BehaviourUpdater
+public class HungerComponent : BehaviourComponent
 {
     float minHunger = 20.0f;
     float hungerSpeed = 5.0f;
 
-    public override void FindGoal(GOAPWorldState agentWorldState, ref GOAPWorldState targetGoal)
+    public override void Init()
+    {
+        foreach (var act in ActionList.humanFoodActions)
+        {
+            actionList.Add(act);
+        }
+
+        requiredWorldStates.CreateElement(WorldValues.holdItemType, WorldValues.HoldItemType.nothing);
+        requiredWorldStates.CreateElement(WorldValues.holdItemObject, null);
+
+        requiredWorldStates.CreateElement(WorldValues.hunger, 100.0f);
+        requiredWorldStates.CreateElement(WorldValues.hasProcessedHunger, false);
+    }
+
+    public override bool HasFindGoal()
+    {
+        return true;
+    }
+    public override GoalStatus FindGoal(GOAPWorldState agentWorldState, GOAPWorldState targetGoal, GoalStatus currentGoalStatus)
     {
         float currentHunger = agentWorldState.GetElementValue<float>(WorldValues.hunger);
         bool isHungry = currentHunger < minHunger;
@@ -16,12 +34,17 @@ public class HungerUpdate : BehaviourUpdater
         {
             // This guy is hungry
             // Get food to eat
-            if (targetGoal == null)
-            {
-                targetGoal = new GOAPWorldState();
-            }
             targetGoal.CreateElement(WorldValues.hunger, 100.0f);
+
+            return GoalStatus.foundHardGoal;
         }
+
+        return currentGoalStatus;
+    }
+
+    public override bool HasUpdate()
+    {
+        return true;
     }
 
     public override void Update(GOAPAgent<GameObject> agent, GOAPWorldState agentSelfishNeeds)

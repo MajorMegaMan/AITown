@@ -30,8 +30,6 @@ public class EatFood : AIAgentAction
 
     public override ActionState PerformAction(U_GOAPAgent agent, GOAPWorldState worldState)
     {
-        AddEffects(worldState);
-
         AIAgent aiAgent = agent.GetAgentObject().GetComponent<AIAgent>();
 
         if(aiAgent.waitingForAction)

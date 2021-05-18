@@ -20,7 +20,6 @@ public class PickUpAxe : AIAgentAction
 
     public override void AddEffects(GOAPWorldState state)
     {
-        //base.AddEffects(state);
         state.SetElementValue(WorldValues.holdItemType, WorldValues.HoldItemType.axe);
         state.SetElementValue(WorldValues.axeAvailable, false);
     }
@@ -40,7 +39,6 @@ public class PickUpAxe : AIAgentAction
 
         worldState.SetElementValue(WorldValues.holdItemObject, aiAgent.actionObject);
 
-        AddEffects(worldState);
         return ActionState.completed;
     }
 

@@ -7,9 +7,9 @@ using U_GOAPAgent = GOAP.GOAPAgent<UnityEngine.GameObject>;
 
 public class PickUpWood : AIAgentAction
 {
-    List<GameObject> instantiatedWoodObjects;
+    static List<GameObject> instantiatedWoodObjects;
 
-    public PickUpWood(List<GameObject> instantiatedWoodObjects)
+    public PickUpWood()
     {
         preconditions.CreateElement(WorldValues.holdItemType, WorldValues.HoldItemType.nothing);
         preconditions.CreateElement(WorldValues.woodAvailable, true);
@@ -19,8 +19,11 @@ public class PickUpWood : AIAgentAction
         effects.CreateElement(WorldValues.worldWoodCount, -1);
 
         name = "Pick Up Wood";
+    }
 
-        this.instantiatedWoodObjects = instantiatedWoodObjects;
+    public static void SetWoodObjectsList(List<GameObject> woodObjects)
+    {
+        instantiatedWoodObjects = woodObjects;
     }
 
     public override void AddEffects(GOAPWorldState state)
@@ -44,7 +47,6 @@ public class PickUpWood : AIAgentAction
 
         if (worldState.GetElementValue<bool>(WorldValues.woodAvailable))
         {
-            AddEffects(worldState);
             HoldableItem woodItem = aiAgent.actionObject.GetComponent<HoldableItem>();
             woodItem.AttachObject(aiAgent.transform);
 

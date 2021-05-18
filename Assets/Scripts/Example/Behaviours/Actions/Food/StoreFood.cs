@@ -28,8 +28,6 @@ public class StoreFood : AIAgentAction
 
     public override ActionState PerformAction(U_GOAPAgent agent, GOAPWorldState worldState)
     {
-        AddEffects(worldState);
-
         // Get held wood object and destroy it
         var data = worldState.GetData(WorldValues.holdItemObject);
         GameObject foodObject = (GameObject)(data.value);

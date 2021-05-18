@@ -52,7 +52,6 @@ public class AIManager : MonoBehaviour
         m_worldState.CreateElement(WorldValues.worldAxe, debugAxe); // this class type should be a HoldableItem
 
         ActionList.Init(woodPrefab, foodPrefab);
-        BehaviourComponenets.Init();
 
         m_behvaiourList.Add(new AIHumanBehaviour());
         m_behvaiourList.Add(new WoodCutterBehaviour());

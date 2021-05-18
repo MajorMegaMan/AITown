@@ -7,10 +7,10 @@ using U_GOAPAgent = GOAP.GOAPAgent<UnityEngine.GameObject>;
 
 public class ChopWood : AIAgentAction
 {
-    List<GameObject> instantiatedWoodObjects;
-    GameObject woodPrefab;
+    static List<GameObject> instantiatedWoodObjects;
+    static GameObject woodPrefab;
 
-    public ChopWood(List<GameObject> instantiatedWoodObjects, GameObject woodPrefab)
+    public ChopWood()
     {
         preconditions.CreateElement(WorldValues.holdItemType, WorldValues.HoldItemType.axe);
         effects.CreateElement(WorldValues.woodAvailable, true);
@@ -18,9 +18,16 @@ public class ChopWood : AIAgentAction
 
         name = "Chop Wood";
         animTrigger = name;
+    }
 
-        this.instantiatedWoodObjects = instantiatedWoodObjects;
-        this.woodPrefab = woodPrefab;
+    public static void SetWoodObjectsList(List<GameObject> woodObjects)
+    {
+        instantiatedWoodObjects = woodObjects;
+    }
+
+    public static void SetWoodPrefab(GameObject prefab)
+    {
+        woodPrefab = prefab;
     }
 
     public override void AddEffects(GOAPWorldState state)
@@ -44,7 +51,6 @@ public class ChopWood : AIAgentAction
             GameObject newWood = GameObject.Instantiate(woodPrefab);
             newWood.transform.position = aiAgent.transform.position + (Vector3.up * 2.5f);
             instantiatedWoodObjects.Add(newWood);
-            AddEffects(worldState);
             return ActionState.completed;
         }
         else

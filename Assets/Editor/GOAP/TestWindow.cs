@@ -28,7 +28,7 @@ public class TestWindow : EditorWindow
     [MenuItem("Window/Test Window")]
     public static void ShowWindow()
     {
-        Instance = CreateWindow<TestWindow>("Test Window");
+        Instance = CreateWindow<TestWindow>("GOAP Inspector");
         Instance.minSize = new Vector2(200, 200);
     }
 
@@ -51,8 +51,7 @@ public class TestWindow : EditorWindow
 
     private void OnEnable()
     {
-        //DrawField();
-        //DrawTextField(m_textField);
+
     }
 
     private void OnDisable()
@@ -84,7 +83,7 @@ public class TestWindow : EditorWindow
             m_currentDisplayObject = action;
             m_currentObjectType = typeof(AIAgentAction);
         }
-        else if (monoType.IsSubclassOf(typeof(BehaviourComponentInitialiser)))
+        else if (monoType.IsSubclassOf(typeof(BehaviourComponent)))
         {
             InitialiseBehaviour(monoType);
         }
@@ -95,9 +94,9 @@ public class TestWindow : EditorWindow
 
         if(m_previous != null)
         {
-            if (m_previous.GetClass().IsSubclassOf(typeof(BehaviourComponentInitialiser)))
+            if (m_previous.GetClass().IsSubclassOf(typeof(BehaviourComponent)))
             {
-                ClearBehaviour();
+                //ClearBehaviour();
             }
         }
 
@@ -110,9 +109,9 @@ public class TestWindow : EditorWindow
         {
             DisplayAIAgentAction((AIAgentAction)m_currentDisplayObject);
         }
-        else if(m_currentObjectType == typeof(BehaviourComponentInitialiser))
+        else if(m_currentObjectType == typeof(BehaviourComponent))
         {
-            DisplayBehaviour((BehaviourComponentInitialiser)m_currentDisplayObject);
+            DisplayBehaviour((BehaviourComponent)m_currentDisplayObject);
         }
     }
 
@@ -158,16 +157,10 @@ public class TestWindow : EditorWindow
 
     void InitialiseBehaviour(Type monoType)
     {
-        if (!ActionList.isInitialised)
-        {
-            ActionList.Init(null, null);
-            Debug.Log("Init Actions");
-        }
-
         var instance = System.Activator.CreateInstance(monoType);
-        BehaviourComponentInitialiser behaviour = (BehaviourComponentInitialiser)instance;
+        BehaviourComponent behaviour = (BehaviourComponent)instance;
         m_currentDisplayObject = behaviour;
-        m_currentObjectType = typeof(BehaviourComponentInitialiser);
+        m_currentObjectType = typeof(BehaviourComponent);
 
         m_additionalLayoutNeeds = new List<object>();
 
@@ -180,16 +173,7 @@ public class TestWindow : EditorWindow
         }
     }
 
-    void ClearBehaviour()
-    {
-        if (ActionList.isInitialised)
-        {
-            ActionList.EditorClear();
-            Debug.Log("Clear Actions");
-        }
-    }
-
-    void DisplayBehaviour(BehaviourComponentInitialiser behaviour)
+    void DisplayBehaviour(BehaviourComponent behaviour)
     {
         List<bool> foldOutStatus = (List<bool>)m_additionalLayoutNeeds[0];
 

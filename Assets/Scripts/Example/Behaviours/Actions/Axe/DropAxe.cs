@@ -19,7 +19,6 @@ public class DropAxe : AIAgentAction
 
     public override void AddEffects(GOAPWorldState state)
     {
-        //base.AddEffects(state);
         state.SetElementValue(WorldValues.holdItemType, WorldValues.HoldItemType.nothing);
         state.SetElementValue(WorldValues.axeAvailable, true);
     }
@@ -34,7 +33,6 @@ public class DropAxe : AIAgentAction
 
         worldState.SetElementValue(WorldValues.holdItemObject, null);
 
-        AddEffects(worldState);
         return ActionState.completed;
     }
 

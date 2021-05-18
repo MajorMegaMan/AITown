@@ -9,6 +9,9 @@ namespace GOAPAssetCreator
         public const string globalPath = "Assets/";
 
         public const string behaviourCompPath = "";
-        public const string behaviourCompName = "NewBehaviour";
+        public const string behaviourCompName = "NewBehaviourComponent";
+
+        public const string agentActionPath = "";
+        public const string agentActionName = "NewAgentAction";
     }
 }

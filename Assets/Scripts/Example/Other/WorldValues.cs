@@ -32,23 +32,4 @@ public static class WorldValues
         food,
         axe
     }
-
-    public static GameObject CreateItem(GameObject itemPrefab, GameObject entity)
-    {
-        return CreateItem(itemPrefab, entity.transform.position + (Vector3.up * 2.5f));
-    }
-
-    public static GameObject CreateItem(GameObject itemPrefab, Vector3 location)
-    {
-        GameObject newItem = GameObject.Instantiate(itemPrefab);
-        newItem.transform.position = location;
-        return newItem;
-    }
-
-    public static GameObject Createfood(GameObject foodPrefab, GameObject entity)
-    {
-        GameObject newFood = CreateItem(foodPrefab, entity);
-        foodObjects.Add(newFood);
-        return newFood;
-    }
 }

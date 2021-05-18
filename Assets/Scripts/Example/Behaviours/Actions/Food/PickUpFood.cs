@@ -7,9 +7,9 @@ using U_GOAPAgent = GOAP.GOAPAgent<UnityEngine.GameObject>;
 
 public class PickUpFood : AIAgentAction
 {
-    List<GameObject> instantiatedFoodObjects;
+    static List<GameObject> instantiatedFoodObjects;
 
-    public PickUpFood(List<GameObject> instantiatedFoodObjects)
+    public PickUpFood()
     {
         preconditions.CreateElement(WorldValues.holdItemType, WorldValues.HoldItemType.nothing);
         preconditions.CreateElement(WorldValues.foodAvailable, true);
@@ -19,13 +19,15 @@ public class PickUpFood : AIAgentAction
         effects.CreateElement(WorldValues.worldFoodCount, -1);
 
         name = "Pick Up Food";
+    }
 
-        this.instantiatedFoodObjects = instantiatedFoodObjects;
+    public static void SetFoodObjectsList(List<GameObject> foodObjects)
+    {
+        instantiatedFoodObjects = foodObjects;
     }
 
     public override void AddEffects(GOAPWorldState state)
     {
-        //base.AddEffects(state);
         state.SetElementValue(WorldValues.holdItemType, WorldValues.HoldItemType.food);
 
         var foodCountData = state.GetData(WorldValues.worldFoodCount);
@@ -44,7 +46,6 @@ public class PickUpFood : AIAgentAction
             GameObject agentGameObject = agent.GetAgentObject();
             AIAgent aiAgent = agentGameObject.GetComponent<AIAgent>();
 
-            AddEffects(worldState);
             HoldableItem foodItem = aiAgent.actionObject.GetComponent<HoldableItem>();
             foodItem.AttachObject(aiAgent.gameObject.transform);
 
