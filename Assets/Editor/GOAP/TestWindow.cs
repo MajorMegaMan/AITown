@@ -70,7 +70,6 @@ public class TestWindow : EditorWindow
 
         if(m_previous == m_monoObject)
         {
-            Debug.Log("No setup");
             return;
         }
 

@@ -67,8 +67,8 @@ public class ChopWood : AIAgentAction
 
         // find tree to chop
         // debug values at the moment
-        aiAgent.actionObject = aiAgent.treeTarget.gameObject;
-        aiAgent.m_actionTargetLocation = aiAgent.treeTarget.position;
+        aiAgent.actionObject = WorldValues.treeTarget.gameObject;
+        aiAgent.m_actionTargetLocation = WorldValues.treeTarget.position;
         return true;
     }
 

@@ -46,8 +46,8 @@ public class StoreFood : AIAgentAction
         AIAgent aiAgent = agentGameObject.GetComponent<AIAgent>();
 
         // This is where the logic to find a food storage would go but right now it is just using a debug value for testing
-        aiAgent.actionObject = aiAgent.foodStoreTarget.gameObject;
-        aiAgent.m_actionTargetLocation = aiAgent.foodStoreTarget.position;
+        aiAgent.actionObject = WorldValues.foodStoreTarget.gameObject;
+        aiAgent.m_actionTargetLocation = WorldValues.foodStoreTarget.position;
         return true;
     }
 

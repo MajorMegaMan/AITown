@@ -47,8 +47,8 @@ public class StoreWood : AIAgentAction
         AIAgent aiAgent = agentGameObject.GetComponent<AIAgent>();
 
         // This is where the logic to find a tree would go but right now it is just using a debug value for testing
-        aiAgent.actionObject = aiAgent.woodStoreTarget.gameObject;
-        aiAgent.m_actionTargetLocation = aiAgent.woodStoreTarget.position;
+        aiAgent.actionObject = WorldValues.woodStoreTarget.gameObject;
+        aiAgent.m_actionTargetLocation = WorldValues.woodStoreTarget.position;
         return true;
     }
 

@@ -166,6 +166,10 @@ public static class ActionList
         GatherFood.SetFoodObjectsList(WorldValues.foodObjects);
 
         PickUpFood.SetFoodObjectsList(WorldValues.foodObjects);
+
+        PickUpAxe.SetAxeObjectsList(WorldValues.axeObjects);
+
+        DropAxe.SetAxeObjectsList(WorldValues.axeObjects);
     }
 
     static void InitHumanList()
@@ -217,28 +221,6 @@ public static class ActionList
             m_humanFoodActions.Add(pickUpFood);
             m_humanFoodActions.Add(storeFood);
             m_humanFoodActions.Add(eatFood);
-        }
-    }
-
-    public static void EditorClear()
-    {
-        if(!Application.isPlaying)
-        {
-            m_chopWood    = null;
-            m_pickUpWood  = null;
-            m_storeWood   = null;
-
-            m_gatherFood  = null;
-            m_pickUpFood  = null;
-            m_storeFood   = null;
-            m_eatFood     = null;
-
-            m_pickUpAxe   = null;
-            m_dropAxe     = null;
-
-            m_humanActions = null;
-            m_humanFoodActions = null;
-            m_humanWoodActions = null;
         }
     }
 }

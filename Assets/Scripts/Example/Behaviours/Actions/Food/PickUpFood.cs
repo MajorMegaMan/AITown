@@ -69,7 +69,7 @@ public class PickUpFood : AIAgentAction
         GameObject agentGameObject = agent.GetAgentObject();
         AIAgent aiAgent = agentGameObject.GetComponent<AIAgent>();
 
-        // find wood to pick up
+        // find food to pick up
         Vector3 agentPosition = aiAgent.transform.position;
 
         GameObject closestFood = instantiatedFoodObjects[0];

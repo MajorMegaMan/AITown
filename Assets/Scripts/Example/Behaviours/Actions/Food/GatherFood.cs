@@ -59,8 +59,8 @@ public class GatherFood : AIAgentAction
 
         // find food to chop
         // debug values at the moment
-        aiAgent.actionObject = aiAgent.foodBushTarget.gameObject;
-        aiAgent.m_actionTargetLocation = aiAgent.foodBushTarget.position;
+        aiAgent.actionObject = WorldValues.foodBushTarget.gameObject;
+        aiAgent.m_actionTargetLocation = WorldValues.foodBushTarget.position;
         return true;
     }
 

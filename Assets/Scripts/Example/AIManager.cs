@@ -14,6 +14,11 @@ public class AIManager : MonoBehaviour
     List<U_GOAPBehaviour> m_behvaiourList = new List<U_GOAPBehaviour>();
 
     public GameObject debugAxe;
+    public GameObject debugAxe2;
+    public Transform treeTarget;
+    public Transform woodStoreTarget;
+    public Transform foodBushTarget;
+    public Transform foodStoreTarget;
 
     [Header("Prefabs")]
     public GameObject axePrefab;
@@ -22,36 +27,19 @@ public class AIManager : MonoBehaviour
 
     [Header("Debug values")]
     [ReadOnly] public int storedWood = 0;
-    [ReadOnly] public int storedFood = 0;
-    [ReadOnly] public bool axeAvailable = true;
     [ReadOnly] public bool woodAvailable = false;
-    [ReadOnly] public bool foodAvailable = false;
     [ReadOnly] public int worldWoodCount = 0;
-    [ReadOnly] public GameObject worldAxe = null;
+
+    [ReadOnly] public int storedFood = 0;
+    [ReadOnly] public bool foodAvailable = false;
+    [ReadOnly] public int worldFoodCount = 0;
+
+    [ReadOnly] public bool axeAvailable = true;
+    [ReadOnly] public int worldAxeCount = 0;
 
     private void Awake()
     {
-        //for(int i = 0; i < WorldValues.worldValueList.Count; i++)
-        //{
-        //    m_worldState.CreateElement(WorldValues.worldValueList[i], default);
-        //}
-
-
-        // wood values
-        m_worldState.CreateElement(WorldValues.storedWood, 0);
-        m_worldState.CreateElement(WorldValues.woodAvailable, false);
-        m_worldState.CreateElement(WorldValues.worldWoodCount, 0);
-
-        // food values
-        m_worldState.CreateElement(WorldValues.storedFood, 0);
-        m_worldState.CreateElement(WorldValues.foodAvailable, false);
-        m_worldState.CreateElement(WorldValues.worldFoodCount, 0);
-
-        // axe values
-        m_worldState.CreateElement(WorldValues.axeAvailable, true);
-        m_worldState.CreateElement(WorldValues.worldAxe, debugAxe); // this class type should be a HoldableItem
-
-        ActionList.Init(woodPrefab, foodPrefab);
+        InitWorldVariables();
 
         m_behvaiourList.Add(new AIHumanBehaviour());
         m_behvaiourList.Add(new WoodCutterBehaviour());
@@ -83,11 +71,43 @@ public class AIManager : MonoBehaviour
     void Update()
     {
         storedWood      = m_worldState.GetElementValue<int>(WorldValues.storedWood);
-        storedFood      = m_worldState.GetElementValue<int>(WorldValues.storedFood);
-        axeAvailable    = m_worldState.GetElementValue<bool>(WorldValues.axeAvailable);
         woodAvailable   = m_worldState.GetElementValue<bool>(WorldValues.woodAvailable);
-        foodAvailable   = m_worldState.GetElementValue<bool>(WorldValues.foodAvailable);
         worldWoodCount  = m_worldState.GetElementValue<int>(WorldValues.worldWoodCount);
-        worldAxe        = m_worldState.GetElementValue<GameObject>(WorldValues.worldAxe);
+        
+        storedFood      = m_worldState.GetElementValue<int>(WorldValues.storedFood);
+        foodAvailable   = m_worldState.GetElementValue<bool>(WorldValues.foodAvailable);
+        worldFoodCount  = m_worldState.GetElementValue<int>(WorldValues.worldFoodCount);
+
+        axeAvailable    = m_worldState.GetElementValue<bool>(WorldValues.axeAvailable);
+        worldAxeCount   = m_worldState.GetElementValue<int>(WorldValues.worldAxeCount);
+    }
+
+    void InitWorldVariables()
+    {
+        // wood values
+        m_worldState.CreateElement(WorldValues.storedWood, 0);
+        m_worldState.CreateElement(WorldValues.woodAvailable, false);
+        m_worldState.CreateElement(WorldValues.worldWoodCount, 0);
+
+        // food values
+        m_worldState.CreateElement(WorldValues.storedFood, 0);
+        m_worldState.CreateElement(WorldValues.foodAvailable, false);
+        m_worldState.CreateElement(WorldValues.worldFoodCount, 0);
+
+        // axe values
+        m_worldState.CreateElement(WorldValues.axeAvailable, true);
+        m_worldState.CreateElement(WorldValues.worldAxeCount, 2);
+
+        WorldValues.axeObjects.Add(debugAxe);
+        WorldValues.axeObjects.Add(debugAxe2);
+
+        // Init Actions
+        ActionList.Init(woodPrefab, foodPrefab);
+
+        // These are debug transforms, they should be more dynaimc values but for the purpose of this demonstration, this is fine.
+        WorldValues.treeTarget = treeTarget;
+        WorldValues.woodStoreTarget = woodStoreTarget;
+        WorldValues.foodBushTarget = foodBushTarget;
+        WorldValues.foodStoreTarget = foodStoreTarget;
     }
 }

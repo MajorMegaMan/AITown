@@ -7,20 +7,32 @@ using U_GOAPAgent = GOAP.GOAPAgent<UnityEngine.GameObject>;
 
 public class DropAxe : AIAgentAction
 {
+    static List<GameObject> instantiatedAxeObjects;
+
     public DropAxe()
     {
         preconditions.CreateElement(WorldValues.holdItemType, WorldValues.HoldItemType.axe);
 
         effects.CreateElement(WorldValues.holdItemType, WorldValues.HoldItemType.nothing);
         effects.CreateElement(WorldValues.axeAvailable, true);
+        effects.CreateElement(WorldValues.worldAxeCount, +1);
 
         name = "Drop Axe";
+    }
+
+    public static void SetAxeObjectsList(List<GameObject> axeObjects)
+    {
+        instantiatedAxeObjects = axeObjects;
     }
 
     public override void AddEffects(GOAPWorldState state)
     {
         state.SetElementValue(WorldValues.holdItemType, WorldValues.HoldItemType.nothing);
         state.SetElementValue(WorldValues.axeAvailable, true);
+
+        int axeCount = state.GetElementValue<int>(WorldValues.worldAxeCount);
+        axeCount++;
+        state.SetElementValue(WorldValues.worldAxeCount, axeCount);
     }
 
     public override ActionState PerformAction(U_GOAPAgent agent, GOAPWorldState worldState)
@@ -30,6 +42,8 @@ public class DropAxe : AIAgentAction
 
         var axeItem = aiAgent.actionObject.GetComponent<HoldableItem>();
         axeItem.DetachObject();
+
+        instantiatedAxeObjects.Add(aiAgent.actionObject);
 
         worldState.SetElementValue(WorldValues.holdItemObject, null);
 
@@ -41,7 +55,8 @@ public class DropAxe : AIAgentAction
         GameObject agentGameObject = agent.GetAgentObject();
         AIAgent aiAgent = agentGameObject.GetComponent<AIAgent>();
 
-        aiAgent.actionObject = agent.GetWorldState().GetElementValue<GameObject>(WorldValues.worldAxe);
+        aiAgent.actionObject = agent.GetWorldState().GetElementValue<GameObject>(WorldValues.holdItemObject);
+        //aiAgent.actionObject = agent.GetWorldState().GetElementValue<GameObject>(WorldValues.worldAxe);
         return true;
     }
 

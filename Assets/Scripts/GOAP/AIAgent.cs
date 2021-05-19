@@ -27,17 +27,6 @@ public class AIAgent : MonoBehaviour
     public float actionTimer = 0.0f;
     public bool waitingForAction = true;
 
-    //Debugging
-    [Header("Debugging")]
-    public Transform treeTarget;
-    public Transform woodStoreTarget;
-    public Transform foodBushTarget;
-    public Transform foodStoreTarget;
-
-    [ReadOnly] public float hunger = 100.0f;
-    [ReadOnly] public WorldValues.HoldItemType item = WorldValues.HoldItemType.nothing;
-    [ReadOnly] public GameObject holdItemObject = null;
-
     private void Awake()
     {
         m_goapAgent = new U_GOAPAgent(gameObject);
@@ -59,11 +48,6 @@ public class AIAgent : MonoBehaviour
     void Update()
     {
         m_goapAgent.Update();
-
-        // debugging
-        hunger = selfishNeeds.GetElementValue<float>(WorldValues.hunger);
-        item = selfishNeeds.GetElementValue<WorldValues.HoldItemType>(WorldValues.holdItemType);
-        holdItemObject = selfishNeeds.GetElementValue<GameObject>(WorldValues.holdItemObject);
     }
 
     public void SetWorldState(GOAPWorldState worldState)
