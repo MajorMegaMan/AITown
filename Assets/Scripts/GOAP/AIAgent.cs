@@ -20,12 +20,13 @@ public class AIAgent : MonoBehaviour
     GOAPWorldState selfishNeeds;
 
     public Animator anim;
+    public SkinnedMeshRenderer animRenderer;
 
     // Action var
-    public Vector3 m_actionTargetLocation = Vector3.zero;
-    public GameObject actionObject = null;
-    public float actionTimer = 0.0f;
-    public bool waitingForAction = true;
+    [ReadOnly] public Vector3 m_actionTargetLocation = Vector3.zero;
+    [ReadOnly] public GameObject actionObject = null;
+    [ReadOnly] public float actionTimer = 0.0f;
+    [ReadOnly] public bool waitingForAction = true;
 
     private void Awake()
     {
@@ -59,6 +60,27 @@ public class AIAgent : MonoBehaviour
     public GOAPWorldState GetWorldState()
     {
         return m_goapAgent.GetWorldState();
+    }
+
+    // returns the actual selfish needs
+    public GOAPWorldState GetSelfishNeeds()
+    {
+        return m_goapAgent.GetSelfishNeeds();
+    }
+
+    public Queue<GOAPAgentAction<GameObject>> GetPlan()
+    {
+        return m_goapAgent.GetPlan();
+    }
+
+    public GOAPAgentAction<GameObject> GetCurrentAction()
+    {
+        return m_goapAgent.GetCurrentAction();
+    }
+
+    public GOAPWorldState GetGoal()
+    {
+        return m_goapAgent.GetGoal();
     }
 
     public void SetBehaviour(U_GOAPBehaviour behaviour)

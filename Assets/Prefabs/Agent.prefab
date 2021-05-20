@@ -70,16 +70,11 @@ MonoBehaviour:
   stoppingDistance: 2
   navAgent: {fileID: 0}
   anim: {fileID: 3459758122462252896}
+  animRenderer: {fileID: 3578043601019463378}
   m_actionTargetLocation: {x: 0, y: 0, z: 0}
   actionObject: {fileID: 0}
   actionTimer: 0
-  treeTarget: {fileID: 0}
-  woodStoreTarget: {fileID: 0}
-  foodBushTarget: {fileID: 0}
-  foodStoreTarget: {fileID: 0}
-  hunger: 100
-  item: 0
-  holdItemObject: {fileID: 0}
+  waitingForAction: 1
 --- !u!1001 &7019161317418349297
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -153,5 +148,10 @@ Transform:
 --- !u!95 &3459758122462252896 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: e82d6359a825ec3459c0af6f9a7b7f3c, type: 3}
+  m_PrefabInstance: {fileID: 7019161317418349297}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &3578043601019463378 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5822821947120931875, guid: e82d6359a825ec3459c0af6f9a7b7f3c, type: 3}
   m_PrefabInstance: {fileID: 7019161317418349297}
   m_PrefabAsset: {fileID: 0}

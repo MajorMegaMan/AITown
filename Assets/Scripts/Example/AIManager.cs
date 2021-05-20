@@ -20,6 +20,10 @@ public class AIManager : MonoBehaviour
     public Transform foodBushTarget;
     public Transform foodStoreTarget;
 
+    public Material woodCutterMaterial;
+
+    public CameraFocus cameraFocus;
+
     [Header("Prefabs")]
     public GameObject axePrefab;
     public GameObject woodPrefab;
@@ -52,6 +56,8 @@ public class AIManager : MonoBehaviour
         {
             m_allAgents.Add(agent);
         }
+
+        cameraFocus.SetWorldState(m_worldState);
     }
 
     // Start is called before the first frame update
@@ -60,10 +66,17 @@ public class AIManager : MonoBehaviour
         m_allAgents[0].SetBehaviour(m_behvaiourList[1]);
         m_allAgents[0].SetWorldState(m_worldState);
 
+        m_allAgents[0].animRenderer.material = woodCutterMaterial;
+
         for (int i = 1; i < m_allAgents.Count; i++)
         {
             m_allAgents[i].SetBehaviour(m_behvaiourList[0]);
             m_allAgents[i].SetWorldState(m_worldState);
+        }
+
+        if (m_allAgents.Count > 0)
+        {
+            cameraFocus.SetAIAgents(m_allAgents);
         }
     }
 

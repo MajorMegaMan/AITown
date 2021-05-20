@@ -31,6 +31,17 @@ public class WoodCutterComponent : BehaviourComponent
 
     public override GoalStatus FindGoal(GOAPWorldState agentWorldState, GOAPWorldState targetGoal, GoalStatus currentGoalStatus)
     {
+        if (agentWorldState.GetElementValue<bool>(WorldValues.axeAvailable))
+        {
+            // Get wood for storage
+            int woodVal = agentWorldState.GetElementValue<int>(WorldValues.worldWoodCount);
+            woodVal += 5;
+
+            targetGoal.CreateElement(WorldValues.worldWoodCount, woodVal);
+
+            return GoalStatus.foundHardGoal;
+        }
+
         if (agentWorldState.GetElementValue<bool>(WorldValues.axeAvailable) || agentWorldState.GetElementValue<bool>(WorldValues.woodAvailable))
         {
             // Get wood for storage

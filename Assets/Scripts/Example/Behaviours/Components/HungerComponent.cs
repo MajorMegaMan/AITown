@@ -6,7 +6,7 @@ using GOAP;
 public class HungerComponent : BehaviourComponent
 {
     float minHunger = 20.0f;
-    float hungerSpeed = 5.0f;
+    float hungerSpeed = 3.0f;
 
     public override void Init()
     {

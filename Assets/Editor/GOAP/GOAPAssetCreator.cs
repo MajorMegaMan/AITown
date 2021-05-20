@@ -177,6 +177,15 @@ namespace GOAPAssetCreator
             lines.Add("        // no Calculations are needed if the agent can perform an action from any range.");
             lines.Add("        return true;");
             lines.Add("    }");
+            lines.Add("    ");
+            lines.Add("    //public override bool CanPerformAction(U_GOAPAgent agent, GOAPWorldState worldState)");
+            lines.Add("    //{");
+            lines.Add("    //    bool canPerform = base.CanPerformAction(agent, worldState);");
+            lines.Add("    //");
+            lines.Add("    //    // Additional Logic to check if this action can be completed should go here");
+            lines.Add("    //");
+            lines.Add("    //    return canPerform;");
+            lines.Add("    //}");
             lines.Add("}");
         }
     }
