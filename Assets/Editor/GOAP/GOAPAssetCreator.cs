@@ -85,8 +85,8 @@ namespace GOAPAssetCreator
             lines.Add("        // Add to actionList");
             lines.Add("        // actionList.Add(act);");
             lines.Add("");
-            lines.Add("        // Create requiredWorldStates");
-            lines.Add("        // requiredWorldStates.CreateElement(string name, object value);");
+            lines.Add("        // Create requiredSelfishNeeds");
+            lines.Add("        // requiredSelfishNeeds.CreateElement(string name, object value);");
             lines.Add("    }");
             lines.Add("");
             lines.Add("    public override bool HasFindGoal()");

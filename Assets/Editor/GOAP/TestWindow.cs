@@ -21,11 +21,9 @@ public class TestWindow : EditorWindow
     object m_currentDisplayObject = null;
     Type m_currentObjectType;
 
-    string fieldResult = "testing Field";
-
     List<object> m_additionalLayoutNeeds = null;
 
-    [MenuItem("Window/Test Window")]
+    [MenuItem("Window/GOAP Inspector")]
     public static void ShowWindow()
     {
         Instance = CreateWindow<TestWindow>("GOAP Inspector");
@@ -34,11 +32,9 @@ public class TestWindow : EditorWindow
 
     private void OnGUI()
     {
-        GUILayout.Label("Somekind of Text.", EditorStyles.boldLabel);
+        GUILayout.Label("Select an action or behaviour component", EditorStyles.boldLabel);
 
-        fieldResult = EditorGUILayout.TextField("Name", fieldResult);
-
-        m_monoObject = (MonoScript)EditorGUILayout.ObjectField("MonoScript", m_monoObject, typeof(MonoScript), false);
+        m_monoObject = (MonoScript)EditorGUILayout.ObjectField("GOAP Script", m_monoObject, typeof(MonoScript), false);
 
         SetupGOAPScript();
         DisplayGOAPScript();
@@ -178,8 +174,8 @@ public class TestWindow : EditorWindow
 
         int spaceSize = 10;
 
-        GUILayout.Label("Required World States", EditorStyles.boldLabel);
-        GOAPWorldState worldState = behaviour.requiredWorldStates;
+        GUILayout.Label("Required Selfish Needs", EditorStyles.boldLabel);
+        GOAPWorldState worldState = behaviour.requiredSelfishNeeds;
         DisplayWorldState(worldState);
 
         GUILayout.Space(spaceSize);
