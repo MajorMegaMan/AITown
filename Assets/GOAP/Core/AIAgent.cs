@@ -23,10 +23,10 @@ public class AIAgent : MonoBehaviour
     public SkinnedMeshRenderer animRenderer;
 
     // Action var
-    [ReadOnly] public Vector3 m_actionTargetLocation = Vector3.zero;
-    [ReadOnly] public GameObject actionObject = null;
-    [ReadOnly] public float actionTimer = 0.0f;
-    [ReadOnly] public bool waitingForAction = true;
+    [HideInInspector] public Vector3 m_actionTargetLocation = Vector3.zero;
+    [HideInInspector] public GameObject actionObject = null;
+    [HideInInspector] public float actionTimer = 0.0f;
+    [HideInInspector] public bool waitingForAction = true;
 
     private void Awake()
     {

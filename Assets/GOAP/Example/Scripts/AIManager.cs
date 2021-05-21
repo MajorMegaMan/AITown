@@ -34,18 +34,6 @@ public class AIManager : MonoBehaviour
     public GameObject woodPrefab;
     public GameObject foodPrefab;
 
-    [Header("Debug values")]
-    [ReadOnly] public int storedWood = 0;
-    [ReadOnly] public bool woodAvailable = false;
-    [ReadOnly] public int worldWoodCount = 0;
-
-    [ReadOnly] public int storedFood = 0;
-    [ReadOnly] public bool foodAvailable = false;
-    [ReadOnly] public int worldFoodCount = 0;
-
-    [ReadOnly] public bool axeAvailable = true;
-    [ReadOnly] public int worldAxeCount = 0;
-
     private void Awake()
     {
         GOAP.GOAPPlanner.SetMaxDepth(50);
@@ -98,16 +86,7 @@ public class AIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        storedWood      = m_worldState.GetElementValue<int>(WorldValues.storedWood);
-        woodAvailable   = m_worldState.GetElementValue<bool>(WorldValues.woodAvailable);
-        worldWoodCount  = m_worldState.GetElementValue<int>(WorldValues.worldWoodCount);
-        
-        storedFood      = m_worldState.GetElementValue<int>(WorldValues.storedFood);
-        foodAvailable   = m_worldState.GetElementValue<bool>(WorldValues.foodAvailable);
-        worldFoodCount  = m_worldState.GetElementValue<int>(WorldValues.worldFoodCount);
 
-        axeAvailable    = m_worldState.GetElementValue<bool>(WorldValues.axeAvailable);
-        worldAxeCount   = m_worldState.GetElementValue<int>(WorldValues.worldAxeCount);
     }
 
     void InitWorldVariables()
