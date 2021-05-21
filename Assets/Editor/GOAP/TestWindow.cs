@@ -64,7 +64,7 @@ public class TestWindow : EditorWindow
             return;
         }
 
-        if(m_previous == m_monoObject)
+        if (m_previous == m_monoObject)
         {
             return;
         }
@@ -87,7 +87,7 @@ public class TestWindow : EditorWindow
             m_currentObjectType = null;
         }
 
-        if(m_previous != null)
+        if (m_previous != null)
         {
             if (m_previous.GetClass().IsSubclassOf(typeof(BehaviourComponent)))
             {
@@ -100,11 +100,11 @@ public class TestWindow : EditorWindow
 
     void DisplayGOAPScript()
     {
-        if(m_currentObjectType == typeof(AIAgentAction))
+        if (m_currentObjectType == typeof(AIAgentAction))
         {
             DisplayAIAgentAction((AIAgentAction)m_currentDisplayObject);
         }
-        else if(m_currentObjectType == typeof(BehaviourComponent))
+        else if (m_currentObjectType == typeof(BehaviourComponent))
         {
             DisplayBehaviour((BehaviourComponent)m_currentDisplayObject);
         }
@@ -162,7 +162,7 @@ public class TestWindow : EditorWindow
         List<bool> foldoutStatus = new List<bool>();
         m_additionalLayoutNeeds.Add(foldoutStatus);
 
-        foreach(var act in behaviour.actionList)
+        foreach (var act in behaviour.actionList)
         {
             foldoutStatus.Add(false);
         }
@@ -181,16 +181,16 @@ public class TestWindow : EditorWindow
         GUILayout.Space(spaceSize);
 
         // display actions
-        for(int i = 0; i < behaviour.actionList.Count; i++)
+        for (int i = 0; i < behaviour.actionList.Count; i++)
         {
             var action = behaviour.actionList[i];
             foldOutStatus[i] = EditorGUILayout.Foldout(foldOutStatus[i], action.GetName());
 
-            if(foldOutStatus[i])
+            if (foldOutStatus[i])
             {
                 DisplayAIAgentAction((AIAgentAction)action);
             }
             //GUILayout.Label(action.GetName(), EditorStyles.boldLabel);
         }
-    }    
+    }
 }
