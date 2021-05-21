@@ -1,0 +1,54 @@
+abstract class GOAPAction
+
+description:
+	This is the base of all GOAPActions and is used to create a plan from the GOAPPlanner and add effects to
+	GOAPWorldStates.
+
+protected member variables:
+
+	GOAPWorldState preconditions
+		Used to check if action is usable.
+
+	GOAPWorldstate effects
+		Currently not actually used in goap as AddEffects is userdefined. But it can be very helpful for
+		debugging purposes.
+
+	string name
+		Name of this action
+
+	int weight
+		Weight of this action. Used to compare for the lowest weight when creating a plan.
+
+constructors:
+
+	GOAPAction()
+		Default. Creates an action with new preconditions and new effects
+
+public methods:
+
+	GOAPWorldState GetPreconditions()
+		returns a copy of preconditions.
+
+	GOAPWorldState GetEffects()
+		returns a copy of effects.
+
+	string GetName()
+		returns name.
+
+	int GetWeight()
+		returns weight.
+
+abstract methods:
+
+	void AddEffects(GOAPWorldState state)
+		This function will be user defined to apply logic and add effects to "state" the GOAPWorldState
+		that was passed as a param. This is essential to the GOAPPlanner running.
+
+public enum ActionState
+	completed
+		action has finished performing.
+	performing
+		action is currently performing.
+	interrupt
+		action was interrupted and could not perform or complete.
+	

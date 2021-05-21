@@ -1,0 +1,79 @@
+class GOAPWorldState
+
+description:
+	This is used to store unique elements with varying value types. Logic is performed on these world states in
+	order for agents to find plan of actions to perform.
+
+public member variables:
+	None
+
+constructors:
+
+	GOAPWorldState()
+		default. No elements exist.
+
+	GOAPWorldState(GOAPWorldState other)
+		copies all the other elements values.
+
+public methods:
+
+	bool CreateElement(string name, object value)
+		This will try to create and add a new WorldData with a name and value. If the string is the same as 
+		an already existing element, then it will fail and not create a new element.
+		returns true if successful, false if unsuccessful.
+
+	void AddOtherWorldState(GOAPWorldState otherState)
+		For each element in otherState, this will create a new element with the same values.
+
+	List<string> GetNames()
+		returns a List of each element name
+
+	void SetElementValue(string name, object value)
+		Sets the element value at "name" with the "value" param.
+
+	WorldData GetData(string name)
+		Searches for the WorldData with "name" and returns it.
+
+	object GetElementValue(string name)
+		Searches for the WorldData with "name" and returns the value.
+
+	Type GetElementValue<Type>(string name)
+		Searches for the WorldData with "name" and returns the value and casts it to Type.
+
+	bool CompareValue(GOAPWorldState comparator, string name)
+		Compares a specific value between two GOAPWorldStates and checks if they are Equal.
+
+	bool CheckState(GOAPWorldState comparator)
+		Compares each value in the comparator to check if all the comparator's values are equal to this.
+		This function's primary use is to check if a given GOAPWorldState meets the preconditions of an 
+		action, and to check if a temp State in the GOAPPlanner matches the goal State it is searching for.
+
+public static methods:
+
+	static GOAPWorldState CombineWithReferences(GOAPWorldState first, GOAPWorldState second)
+		This function will create a new GOAPWorldState and combine the first and second states together.
+		The new GOAPWorldState will contain WorldData which are references to the first and second.
+
+
+class WorldData
+
+public member variables:
+
+	string name
+		The name of this element in GOAPWorldState.
+
+	object value
+		The value of this element in GOAPWorldState.
+
+constructors:
+
+	WorldData(string name, object value)
+		Sets name and value.
+
+public methods:
+
+	Type ConvertValue<Type>()
+		Casts value into Type and returns it.
+
+	void SetDefaultValue<Type>()
+		Assigns value using the keyword default.

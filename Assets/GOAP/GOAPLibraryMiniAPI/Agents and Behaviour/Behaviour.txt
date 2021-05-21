@@ -1,0 +1,39 @@
+abstract class GOAPBehaviour<GameObjectRef>
+
+description:
+	This class will contain the actions and selfish Needs that an agent will rely on to plan and perform
+	actions.
+
+protected member variables:
+
+	List<GOAPAgentAction<GameObjectRef>> m_actions
+		actions that the Agent will be able to use.
+
+	GOAPWorldState m_selfishNeeds
+		non Global worldState variables that are specific to each agent. These are values that are used in
+		GOAP planning.
+
+public abstract methods:
+
+	GOAPWorldState FindGoal(GOAPWorldState agentWorldState)
+		returns a user defind target goal. This how the Agent will use the GOAP Planner, so this is where
+		logic to Find a relevant plan should go. Make reference of values that are stored in
+		"agentWorldState".
+
+public methods:
+
+	List<GOAPAgentAction<GameObjectRef>> GetActions()
+		returns m_actions.
+
+	List<GOAPAction> GetBaseActions()
+		returns the list of actions as GOAPAction's
+
+	GOAPWorldState GetSelfishNeeds()
+		returns a copy of m_selfishNeeds
+
+	Queue<GOAPAgentAction<GameObjectRef>> CalcPlan(GOAPWorldState agentWorldState)
+		returns a plan from the GOAPPlanner based on this "agentWorldState" which is a combination of 
+		a global world state and it's selfsih needs.
+
+	List<GOAPAction> GetUsableActions(GOAPWorldState agentWorldState)
+		returns a list of usable actions from this "agentWorldState".

@@ -1,0 +1,93 @@
+class GOAPAgent<GameObjectRef>
+
+description:
+	An AI that will perform it's given actions and navigate towards the action positions.
+
+public member variables:
+	none
+
+public enum definition:
+	enum MovementFlag
+		PARTIAL
+			the agent has not moved but may still need to check if it can continue
+		COMPLETE
+			the agent has moved and will need to check if in range of action
+		UNABLE
+			the agent can no longer access it's target action
+
+public delegate definitions:
+	MovementFlag MoveToFunc()
+
+	void Func();
+		This is just a simple empty function.
+
+constructor:
+
+	GOAPAgent(GameObjectRef agentGameObject)
+		the engine's game object. (or any user defined object)
+		This is the object that will be used by the user to create logic in many methods.
+		For example retrieving position data to find how close it is to an action point.
+
+public methods:
+
+	void SetEnterNavigationFunc(Func enterNavigation)
+		Sets the internal enter navigation delegate that is invoked when this agent wants to begin movement.
+
+	void SetExitNavigationFunc(Func exitNavigation)
+		Sets the internal exit navigation delegate that is invoked when this agent wants to stop movement.
+
+	void SetMoveToDelegate(MoveToFunc moveDelegate)
+		Sets the internal moveTo delegate that is invoked when this agent needs to move towards an action
+		point. The moveTo delegate returns the enum MovementFlag
+
+	void SetSelfishWorldState()
+		Sets the agent's selfishNeeds based on the agent's set behaviour.
+		This must be Set BEFORE SetWorldState() as the Global GOAPWorldState is combined with selfishNeeds
+		in that method.
+
+	void SetStartPerformingFunc(Func startPerforming)
+		Sets the internal startPerform delegate that is invoked when this agent starts an action.
+
+	void SetExitPerformingFunc(Func exitPerforming)
+		Sets the internal exitPerform delegate that is invoked when this agent completes or interrupts 
+		an action.
+
+	GameObjectRef GetAgentObject()
+		returns the GameObjectRef that this agent uses.
+
+	GOAPWorldState GetSelfishNeeds()
+		returns this agent's actual selfishNeeds.
+
+	void Update()
+		should be called in the engine's update method. Invokes this agent's behaviour update and 
+		this agent's current state.
+
+	bool SetWorldState(GOAPWorldState worldState)
+		Sets the internal worldState reference and Trys to combine the WorldState and selfishNeeds.
+		returns true if selfish Needs is not null
+
+	GOAPWorldState GetWorldState()
+		returns a copy of this agent's combined worldState
+
+	void SetBehaviour(GOAPBehaviour<GameObjectRef> behaviour)
+		Sets this agent's behaviour and also sets this agent's selfish Needs.
+		Checks if the worldState was set and then combine's them if it was not null.
+
+	void FindPlan()
+		Force agent to find a new plan
+
+	Queue<GOAPAgentAction<GameObjectRef>> GetPlan()
+		Gets a copy of the current plan
+
+	GOAPAgentAction<GameObjectRef> GetCurrentAction()
+		Gets the current Action that the agent is targeting to perform or move to.
+
+	GOAPWorldState GetGoal()
+		returns a target goal by calling the behaviours FindPlan. Does not force a new plan for this agent.
+		Useful for debugging.
+
+	List<GOAPAction> GetUsableActions()
+		returns a list of current usable actions.
+
+	GOAPAction GetAction()
+		Get the currentAction as a base GOAPAction.

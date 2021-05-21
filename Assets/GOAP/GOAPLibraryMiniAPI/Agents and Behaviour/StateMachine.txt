@@ -1,0 +1,28 @@
+class StateMachine
+
+description:
+	simple State machine used by the GOAPAgent to moveTo, performAction and Plan
+
+public delegate definition:
+	void StateMachineFunc()
+		used as an empty void function for the state machine.
+
+public member variables:
+	none
+
+public methods:
+
+	void SetState(int index)
+		Set the current state to the index of the internal delegate List
+
+	void CallState()
+		invoke the current state.
+			(For some dumb reason I wanted to avoid naming this Invoke)
+
+	void AddStates(int amount)
+		adds the "amount" of empty delegates to the internal delegate List.
+
+	void SetStateFunc(int index, StateMachineFunc func)
+		Sets the delegate at the specified index.
+
+	

@@ -1,0 +1,29 @@
+abstract class GOAPAgentAction<GameObjectRef> : extends GOAPAction
+
+description:
+	Used by Agents to create a plan and perform actions.
+
+additional
+
+public abstract methods:
+
+	ActionState PerformAction(GOAPAgent<GameObjectRef> agent, GOAPWorldState worldState)
+		User defined performing action. Variables can be referenced from "agent". For example position.
+		Values can also be used from worldState which is this agent's worldState.
+
+	bool EnterAction(GOAPAgent<GameObjectRef> agent)
+		User defined values can be set here for when an agent first assigns it's current action.
+		For example an agent needs to assign it's action's target's position before it can walk there.
+		(This function is horribly named. But the idea is it first enters the action when it is popped from
+		 the agents plan.<queue>)
+
+	bool IsInRange(GOAPAgent<GameObjectRef> agent)
+		User defind distance check for if the agent is in range.
+		simply return true if the agent can perform this action at any location.
+
+public virtual methods:
+
+	bool CanPerformAction(GOAPAgent<GameObjectRef> agent, GOAPWorldState worldState)
+		User can override this function if they want additional logic to check if an agent is still able 
+		to perform it's action when navigating.
+		Should always call the base. as it performs a check state with preconditions.

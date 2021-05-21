@@ -1,0 +1,47 @@
+static class GOAPPlanner
+
+description:
+	This is used to create a queue of actions that agents may use to perform actions.
+
+public static variables:
+	None
+
+public methods:
+
+	void SetMaxDepth(int capValue)
+		Sets the Max Depth value of the planner to stop building the search tree when it's depth has 
+		exceeded capValue.
+
+	Queue<GOAPAction> CalcPlan(GOAPWorldState currentWorldstate, GOAPWorldState goal, List<GOAPAction> actions)
+		Builds a search Tree of Actions and the World State after the actions AddEffects() has been called.
+		returns the plan with the lowest weight unless it has exceeded the max depth or the target goal was 
+		null.
+
+	List<GOAPAction> GetUsableActions(GOAPWorldState currentWorldstate, List<GOAPAction> actions)
+		returns a list of usable actions at this "currentWorldState" using these "actions".
+		This function is called at every Node in the search tree.
+
+	List<Node> DebugBuildTree(GOAPWorldState currentWorldstate, GOAPWorldState goal, List<GOAPAction> actions)
+		Builds a tree and returns it without affecting any GOAP variables. Useful for debugging an agents 
+		planning method.
+
+public class Node
+
+public member variables:
+
+	Node parent
+		The Node that this came from
+	int depth
+		The depth of this Node in it's tree.
+	int runningTotal
+		The total weight of this Node and it's parent chain. Used to find the lowest weighted plan.
+	GOAPWorldState currentState
+		The current state after action has added effects.
+	GOAPAction
+		Action that added effects.
+	bool isGoal
+		did this node acheive the target goal.
+constructor:
+
+	Node(Node parent, int depth, int runningTotal, GOAPWorldState currentState, GOAPAction action)
+		used to initialise Nodes.
